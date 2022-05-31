@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  plex:
+    image: lscr.io/linuxserver/plex
+    container_name: plex
+    network_mode: "host"
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Malta
+      - VERSION=latest
+      - PLEX_CLAIM=claim-1234567890
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - /home/serveradmin/plex/config:/config
+      - /mnt/movies:/movies
+      - /mnt/music:/music
+      - /mnt/series:/series
+    ports:
+      - 32400:32400  

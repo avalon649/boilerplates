@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  subsonic:
+    image: gzurowski/subsonic
+    container_name: subsonic
+    restart: unless-stopped
+    networks:
+      - proxy    
+    volumes:
+      - /home/serveradmin/subsonic/config:/var/subsonic
+      - /mnt/music:/var/music:ro
+    ports:
+      - 4040:4040
+    
+networks:
+  proxy:
+    external: true

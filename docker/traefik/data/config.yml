@@ -1,0 +1,199 @@
+http:
+ #region routers 
+  routers:
+    proxmox:
+      entryPoints:
+        - "https"
+      rule: "Host(`proxmox.local.example.com`)"
+      middlewares:
+        - authelia
+        - default-headers
+      tls: {}
+      service: proxmox
+    pihole:
+      entryPoints:
+        - "https"
+      rule: "Host(`pihole.local.example.com`)"
+      middlewares:
+        - default-headers
+        - addprefix-pihole
+      tls: {}
+      service: pihole
+    pihole2:
+      entryPoints:
+        - "https"
+      rule: "Host(`pihole2.local.example.com`)"
+      middlewares:
+        - default-headers
+        - addprefix-pihole2
+      tls: {}
+      service: pihole2
+    nextcloud:
+      entryPoints:
+        - "https"
+      rule: "Host(`nextcloud.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: nextcloud  
+    truenas:
+      entryPoints:
+        - "https"
+      rule: "Host(`truenas.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: truenas
+    grafana:
+      entryPoints:
+        - "https"
+      rule: "Host(`grafana.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: grafana 
+    influxdb:
+      entryPoints:
+        - "https"
+      rule: "Host(`influxdb.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: influxdb   
+    prometheus:
+      entryPoints:
+        - "https"
+      rule: "Host(`prometheus.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: prometheus
+    plex:
+      entryPoints:
+        - "https"
+      rule: "Host(`plex.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: plex            
+    kasm:
+      entryPoints:
+        - "https"
+      rule: "Host(`kasm.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: kasm  
+    airsonic:
+      entryPoints:
+        - "https"
+      rule: "Host(`airsonic.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: airsonic  
+
+#endregion
+#region services
+  services:
+    proxmox:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.5.100:8006"
+        passHostHeader: true
+    pihole:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.5.53:80"
+        passHostHeader: true
+    pihole2:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.5.54:80"
+        passHostHeader: true
+    nextcloud:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.5.200:9443"
+        passHostHeader: true
+    truenas:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.5.78"
+        passHostHeader: true
+    grafana:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.5.200:3000"
+        passHostHeader: true
+    influxdb:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.5.200:8086"
+        passHostHeader: true        
+    prometheus:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.5.200:9090"
+        passHostHeader: true  
+    plex:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.5.200:32400"
+        passHostHeader: true 
+    kasm:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.5.112"
+        passHostHeader: true 
+    airsonic:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.5.200:4040"
+        passHostHeader: true             
+
+#endregion
+  middlewares:
+    https-redirect:
+      redirectScheme:
+        scheme: https  
+    authelia:
+      forwardAuth:
+        address: "http://authelia:9091/api/verify?rd=https://auth.local.example.com"
+    addprefix-pihole:
+      addPrefix:
+        prefix: "/admin"     
+    https-redirect:
+      redirectScheme:
+        scheme: https
+    addprefix-pihole2:
+      addPrefix:
+        prefix: "/admin"
+
+    default-headers:
+      headers:
+        frameDeny: true
+        sslRedirect: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+        customRequestHeaders:
+          X-Forwarded-Proto: https
+
+    default-whitelist:
+      ipWhiteList:
+        sourceRange:
+        - "10.0.0.0/8"
+        - "192.168.0.0/16"
+        - "172.16.0.0/12"
+
+    secured:
+      chain:
+        middlewares:
+        - default-whitelist
+        - default-headers
+

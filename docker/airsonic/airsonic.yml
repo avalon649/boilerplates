@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  airsonic-advanced:
+    image: airsonic/airsonic
+    container_name: airsonic
+    restart: unless-stopped
+    networks:
+      - proxy    
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Malta
+    volumes:
+      - /home/serveradmin/airsonic/data:/airsonic/data
+      - /mnt/music:/airsonic/music
+      - /mnt/playlists:/airsonic/playlists
+      - /mnt/podcasts:/airsonic/podcasts
+    ports:
+      - 4040:4040
+    
+networks:
+  proxy:
+    external: true

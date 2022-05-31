@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  dim:
+    image: ghcr.io/dusk-labs/dim:dev
+    container_name: Dim
+    restart: unless-stopped
+    volumes:
+      - $HOME/.config/dim:/opt/dim/config 
+      - /mnt/movies:/mnt/movies
+      - /mnt/music:/mnt/music
+      - /mnt/series:/mnt/series
+    # devices: 
+    #   - /dev/dri/renderD128:/dev/dri/renderD128  
+    ports:
+      - 8000:8000  
