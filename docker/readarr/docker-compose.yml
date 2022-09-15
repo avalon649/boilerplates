@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  readarr:
+    image: linuxserver/readarr:0.1.1-nightly
+    container_name: readarr
+    restart: unless-stopped
+    networks:
+     - proxy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Malta
+    volumes:
+      - ./config:/config
+      - ./books:/books
+      - ./downloads:/downloads
+    ports:
+      - 8787:8787
+
+networks:
+  proxy:
+    external: true
