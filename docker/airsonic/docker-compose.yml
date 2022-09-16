@@ -17,7 +17,7 @@ services:
       - /mnt/playlists:/airsonic/playlists
       - /mnt/podcasts:/airsonic/podcasts
     ports:
-      - 4045:4040
+      - 4040:4040
     
 networks:
   proxy:
