@@ -12,8 +12,8 @@ services:
       - PGID=1000
       - TZ=Europe/Malta
     volumes:
-      - /home/serveradmin/nextcloud/appdata:/config
-      - /home/serveradmin/nextcloud/data:/data
+      - ./appdata:/config
+      - ./data:/data
     ports:
       - 9443:443  
 
@@ -32,7 +32,7 @@ services:
       - MYSQL_USER=nextcloud
       - MYSQL_PASSWORD=1234567890
     volumes:
-      - /home/serveradmin/nextcloud/mariadb/config:/config
+      - ./mariadb/config:/config
       
 networks:
   proxy:

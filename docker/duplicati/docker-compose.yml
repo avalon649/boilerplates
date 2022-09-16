@@ -11,7 +11,7 @@ services:
       - TZ=Europe/London
       - CLI_ARGS= #optional
     volumes:
-      - /home/serveradmin/duplicati/config>:/config
+      - ./config>:/config
       - </path/to/backups>:/backups
       - </path/to/source>:/source
     ports:

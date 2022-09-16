@@ -5,7 +5,7 @@ services:
     image: authelia/authelia
     container_name: authelia
     volumes:
-      - /home/serveradmin/authelia/config:/config
+      - ./config:/config
     networks:
       - proxy
     labels:

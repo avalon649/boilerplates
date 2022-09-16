@@ -8,7 +8,7 @@ services:
     networks:
       - proxy     
     volumes:
-      - /home/serveradmin/vaultwarden/data:/data
+      - ./data:/data
     environment:
       - ADMIN_TOKEN=1234567890
     labels:

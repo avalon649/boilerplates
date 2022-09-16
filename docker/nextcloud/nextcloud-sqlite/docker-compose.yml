@@ -12,8 +12,8 @@ services:
       - PGID=1000
       - TZ=Europe/Malta
     volumes:
-      - /home/serveradmin/nextcloud/appdata:/config
-      - /home/serveradmin/nextcloud/data:/data
+      - ./nextcloud/appdata:/config
+      - ./nextcloud/data:/data
     ports:
       - 9443:443  
 

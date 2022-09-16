@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  librespeed:
+    image: lscr.io/linuxserver/librespeed
+    container_name: librespeed
+    restart: unless-stopped
+    networks:
+      - proxy     
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Malta
+      # - PASSWORD=PASSWORD
+    volumes:
+      - ./config:/config
+    ports:
+      - 8089:80  
+
+networks:
+  proxy:
+    external: true

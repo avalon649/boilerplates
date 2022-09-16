@@ -13,9 +13,7 @@ services:
       - TZ=Europe/Malta
       # - PASSWORD=PASSWORD
     volumes:
-      - /home/serveradmin/librespeed/config:/config
-    ports:
-      - 8089:80  
+      - ./config:/config
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.librespeed.entrypoints=http"

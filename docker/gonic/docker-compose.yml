@@ -9,8 +9,6 @@ services:
       - proxy 
     volumes:
       - /mnt/music:/media
-    ports: 
-      - 8081:80 
      labels:
        - "traefik.enable=true"
        - "traefik.http.routers.ampache.entrypoints=http"
@@ -26,5 +24,5 @@ services:
        - 'traefik.http.routers.ampache-secure.middlewares=authelia@docker'
 
 networks:
-  proxy:S
+  proxy:
     external: true 

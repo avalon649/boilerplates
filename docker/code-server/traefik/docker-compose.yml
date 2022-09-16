@@ -13,8 +13,8 @@ services:
       - PGID=1000
       - TZ=Europe/Malta
     volumes:
-      - /mnt/pv/code-server/config:/config:rw
-      - /mnt/pv/code-server/assets:/assets:rw
+      - ./config:/config:rw
+      - ./assets:/assets:rw
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.codeserver.entrypoints=http"

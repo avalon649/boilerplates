@@ -14,7 +14,7 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all
       - JELLYFIN_PublishedServerUrl=192.168.10.10
     volumes:
-      - /home/serveradmin/jellyfin/config:/config
+      - ./config:/config
       - /mnt/series:/data/tvshows
       - /mnt/movies:/data/movies
       - /mnt/music:/data/music

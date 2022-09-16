@@ -11,7 +11,7 @@ services:
       - UID=1000 # The UID to run emby as (default: 2)
       - GID=1000 # The GID to run emby as (default 2)
     volumes:
-      - /home/serveradmin/emby/config:/config # Configuration directory
+      - ./config:/config # Configuration directory
       - /mnt/series:/mnt/series # Media directory
       - /mnt/movies:/mnt/movies # Media directory
     ports:

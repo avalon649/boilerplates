@@ -14,7 +14,7 @@ services:
       - PLEX_CLAIM=claim-1234567890
       - NVIDIA_VISIBLE_DEVICES=all
     volumes:
-      - /home/serveradmin/plex/config:/config
+      - ./config:/config
       - /mnt/movies:/movies
       - /mnt/music:/music
       - /mnt/series:/series

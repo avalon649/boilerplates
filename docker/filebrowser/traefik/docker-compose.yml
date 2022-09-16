@@ -11,10 +11,8 @@ services:
     environment:
       - FB_BASEURL=/
     volumes:
-      - /home/serveradmin:/data
-      - /home/serveradmin/filebrowser/config:/config
-    ports:
-      - 8089:8080  
+      - ./data:/data
+      - ./config:/config
      labels:
        - "traefik.enable=true"
        - "traefik.http.routers.filebrowser.entrypoints=http"

@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  code-server:
+    image: lscr.io/linuxserver/code-server
+    container_name: code-server
+    restart: unless-stopped
+    networks:
+      - proxy
+    user: root:root
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Malta
+    volumes:
+      - ./config:/config:rw
+      - ./assets:/assets:rw
+    ports:
+     - 8443:8443
+
+networks:
+  proxy:
+    external: true
