@@ -14,7 +14,7 @@ services:
     volumes:
       - ./appdata:/config
       - ./data:/data
-      - local:/local
+      - local:/local:rw
     ports:
       - 9443:443
 
