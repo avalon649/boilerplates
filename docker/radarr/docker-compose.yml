@@ -1,34 +1,34 @@
 version: "3.8"
 
 services:
-  code-server:
-    image: lscr.io/linuxserver/code-server
-    container_name: code-server
-    restart: always
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
     networks:
       - proxy
-    user: root:root
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Malta
     volumes:
-      - config:/config:rw
-      - assets:/assets:rw
+      - ./data:/config
+      - movies:/movies 
+      - downloads:/downloads 
     ports:
-      - 4443:8443
+      - 7878:7878
 
 volumes:
-  config:
+  movies:
     driver_opts:
       type: "nfs"
       o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
-      device: ":mnt/storage0/docker-volumes/code-server/config"
-  assets:
+      device: ":/mnt/storage0/plex/movies"
+  downloads:
     driver_opts:
       type: "nfs"
       o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
-      device: ":/mnt/storage0/docker-volumes/code-server/assets"
+      device: ":/mnt/storage0/plex/downloads"
 
 networks:
   proxy:

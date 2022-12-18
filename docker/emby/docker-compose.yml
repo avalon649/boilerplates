@@ -1,21 +1,32 @@
-version: "3"
+version: "3.8"
 
 services:
   emby:
     image: emby/embyserver
     container_name: embyserver
-    restart: unless-stopped    
-    runtime: nvidia # Expose NVIDIA GPUs
-    network_mode: host # Enable DLNA and Wake-on-Lan
+    restart: unless-stopped
+    network_mode: host
     environment:
-      - UID=1000 # The UID to run emby as (default: 2)
-      - GID=1000 # The GID to run emby as (default 2)
+      - UID=1000
+      - GID=1000
     volumes:
-      - ./config:/config # Configuration directory
-      - /mnt/series:/mnt/series # Media directory
-      - /mnt/movies:/mnt/movies # Media directory
+      - ./config:/config
+      - movies:/movies
+      - series:/series
     ports:
-      - 8096:8096 # HTTP port
-      - 8920:8920 # HTTPS port
+      - 8096:8096
+      - 8920:8920
     devices:
-      - /dev/dri:/dev/dri # VAAPI/NVDEC/NVENC render nodes
+      - /dev/dri:/dev/dri
+
+volumes:
+  movies:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/movies"
+  series:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/series"      

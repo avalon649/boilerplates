@@ -1,30 +1,30 @@
 version: "3.8"
 
 services:
-  nextcloud:
-    image: lscr.io/linuxserver/nextcloud
-    container_name: nextcloud
-    restart: always
+  nginx:
+    image: lscr.io/linuxserver/nginx
+    container_name: nginx
+    restart: unless-stopped
     networks:
-      - proxy
+      - nginx
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Malta
     volumes:
-      - ./appdata:/config
-      - ./data:/data
-      - local:/local
+      - ./config:/config
+      - www:/config/www
     ports:
-      - 9443:443
+      - 8085:80
+      - 5443:443
 
 volumes:
-  local:
+  www:
     driver_opts:
       type: "nfs"
       o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
-      device: ":/mnt/storage0/nextcloud"
+      device: ":/mnt/storage0/docker-volumes/jekyll-theme-chirpy/_site"
 
 networks:
-  proxy:
+  nginx:
     external: true
