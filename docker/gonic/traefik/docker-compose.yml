@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  ampache:
+    image: ampache/ampache
+    container_name: ampache
+    restart: unless-stopped
+    networks:
+      - proxy 
+    volumes:
+      - /mnt/music:/media
+    ports: 
+      - 8081:80 
+
+networks:
+  proxy:S
+    external: true 

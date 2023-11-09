@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  code-server:
+    image: lscr.io/linuxserver/code-server
+    container_name: code-server
+    restart: always
+    networks:
+      - proxy
+    user: root:root
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Malta
+    volumes:
+      - config:/config:rw
+      - assets:/assets:rw
+    ports:
+      - 4443:8443
+
+volumes:
+  config:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":mnt/storage0/docker-volumes/code-server/config"
+  assets:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/docker-volumes/code-server/assets"
+
+networks:
+  proxy:
+    external: true

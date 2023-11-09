@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    networks:
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Malta
+    volumes:
+      - ./data:/config
+      - movies:/movies 
+      - downloads:/downloads 
+    ports:
+      - 7878:7878
+
+volumes:
+  movies:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/movies"
+  downloads:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/downloads"
+
+networks:
+  proxy:
+    external: true

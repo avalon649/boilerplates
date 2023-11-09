@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: appname
+  namespace: namespace
+  labels:
+    app: appname-app
+spec:
+  selector:
+    matchLabels:
+      app: appname-app
+  replicas: 1 
+  template:
+    metadata:
+      labels:
+        app: appname-app
+    spec:
+      containers:
+      - name: appname
+        image: nginx:latest
+        env:
+        - name: TZ
+          value: Europe/Malta
+        - name: UID
+          value: '1000'
+        - name: GID
+          value: '1000'        
+        resources:
+          limits:
+            memory: 2Gi
+            # cpu: "1"
+          requests:
+            memory: 1Gi
+            # cpu: "0.2"
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /config
+          name: app-config
+        - mountPath: /music
+          name: music        
+      volumes:
+      - name: app-config
+        persistentVolumeClaim:
+          claimName: app-config-claim
+      - name: music
+        nfs:
+          path: /mnt/storage0/plex/music
+          server: 10.0.21.20
+          readOnly: no          

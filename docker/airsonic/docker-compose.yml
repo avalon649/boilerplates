@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  airsonic-advanced:
+    image: airsonic/airsonic
+    container_name: airsonic
+    restart: unless-stopped
+    networks:
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Malta
+    volumes:
+      - ./data:/airsonic/data
+      - music:/airsonic/music
+      - playlists:/airsonic/playlists
+      - podcasts:/airsonic/podcasts
+    ports:
+      - 4040:4040
+
+networks:
+  proxy:
+    external: true
+
+volumes:
+  music:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/music"
+  playlists:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/playlists"
+  podcasts:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/podcasts"

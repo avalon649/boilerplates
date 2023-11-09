@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin
+    container_name: jellyfin
+    network_mode: host
+    restart: unless-stopped   
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Malta
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - NVIDIA_VISIBLE_DEVICES=all
+      - JELLYFIN_PublishedServerUrl=192.168.10.10
+    volumes:
+      - ./config:/config
+      - /mnt/series:/data/tvshows
+      - /mnt/movies:/data/movies
+      - /mnt/music:/data/music
+    ports:
+      - 8096:8096

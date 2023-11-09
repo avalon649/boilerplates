@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  embystat:
+    image: lscr.io/linuxserver/embystat:latest
+    container_name: embystat
+    restart: unless-stopped
+    networks:
+     - proxy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Malta
+    volumes:
+      - ./config:/config
+    ports:
+      - 6555:6555
+    
+networks:
+  proxy:
+    external: true    
