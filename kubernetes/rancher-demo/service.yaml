@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rancher-demo-svc
+  namespace: rancher-demo
+spec:
+  selector:
+    app: rancher-demo-app
+  type: ClusterIP
+  ports: 
+  - name: rancher-demo-svc
+    port: 80 
+    protocol: TCP
+    targetPort: 8083
