@@ -1,8 +1,4 @@
 ---
-networks:
-  frontend:
-    external: true
-
 services:
   portainer:
     image: portainer/portainer-ce:latest
@@ -17,5 +13,3 @@ services:
       - 9000:9000
       - 8000:8000
     restart: always
-    networks:
-      - frontend

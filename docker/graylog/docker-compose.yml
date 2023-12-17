@@ -70,7 +70,9 @@ services:
       GRAYLOG_TRANSPORT_EMAIL_USE_SSL: ${EMAIL_USE_SSL}
       GRAYLOG_TRANSPORT_FROM_EMAIL: ${FROM_EMAIL}
       GRAYLOG_TRANSPORT_SUBJECT_PREFIX: ${SUBJECT_PREFIX}
-
+    env_file:
+      - .env
+      
     entrypoint: /usr/bin/tini -- wait-for-it opensearch:9200 -- /docker-entrypoint.sh
     volumes:
       - "./config/graylog/graylog.conf:/usr/share/graylog/config/graylog.conf"

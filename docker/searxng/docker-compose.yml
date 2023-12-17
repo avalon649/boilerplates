@@ -1,8 +1,4 @@
 ---
-networks:
-  backend:
-    external: true
-
 services:
   redis:
     container_name: redis-xng
@@ -39,8 +35,6 @@ services:
         max-file: "1"
     volumes:
       - ./searxng:/etc/searxng:rw
-    networks:
-      - backend
 
 volumes:
   redis-data:

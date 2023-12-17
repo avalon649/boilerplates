@@ -4,9 +4,9 @@ services:
     image: gzurowski/subsonic
     container_name: subsonic
     ports:
-      - 4040:4040  
+      - 4040:4040
     volumes:
       - ./config:/var/subsonic
       - ./music:/var/music:ro
-    restart: unless-stopped  
+    restart: unless-stopped
     

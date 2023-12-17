@@ -6,9 +6,9 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/Malta
+      - TZ=Etc/UTC
     ports:
-      - 9443:443      
+      - 9443:443
     volumes:
       - ./appdata:/config
       - ./data:/data

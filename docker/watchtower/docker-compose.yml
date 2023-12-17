@@ -8,7 +8,7 @@ services:
     image: containrrr/watchtower
     container_name: watchtower
     environment:
-      - TZ=Europe/Malta
+      - TZ=Etc/UTC
       - WATCHTOWER_DEBUG=true
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_SCHEDULE="0 30 3 * * *"

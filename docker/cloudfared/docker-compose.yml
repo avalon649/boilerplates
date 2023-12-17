@@ -1,7 +1,5 @@
 ---
 networks:
-  frontend:
-    external: true
   backend:
     external: true
 
@@ -14,5 +12,4 @@ services:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
     command: tunnel --no-autoupdate run
     networks:
-      - frontend
       - backend

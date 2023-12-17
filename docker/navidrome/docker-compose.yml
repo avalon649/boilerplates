@@ -21,7 +21,7 @@ services:
     restart: unless-stopped
     networks:
       - backend
-      
+
 volumes:
   music:
     driver_opts:

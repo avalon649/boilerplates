@@ -19,7 +19,7 @@ services:
     restart: unless-stopped
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
-      
+
   grafana:
     image: grafana/grafana-oss:latest
     container_name: grafana
@@ -29,8 +29,8 @@ services:
       - "3000:3000"
     volumes:
       - grafana-data:/var/lib/grafana
-    restart: unless-stopped      
-    
+    restart: unless-stopped
+
   node_exporter:
     image: quay.io/prometheus/node-exporter:latest
     container_name: node_exporter
@@ -42,9 +42,9 @@ services:
       - '/:/host:ro,rslave'
     command:
       - '--path.rootfs=/host'
-            
+
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.45.0  
+    image: gcr.io/cadvisor/cadvisor:v0.45.0
     container_name: cadvisor
     # ports:
     #   - "8080:8080"

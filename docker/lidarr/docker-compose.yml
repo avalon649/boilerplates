@@ -8,7 +8,7 @@ services:
       - PGID=1000
       - TZ=Etc/UTC
     ports:
-      - 8686:8686    
+      - 8686:8686
     volumes:
       - ./appdata/config:/config
       - ./music:/music #optional

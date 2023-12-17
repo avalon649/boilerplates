@@ -6,7 +6,7 @@ services:
     privileged: true
     ports:
       - 8080:80
-      - 8443:443 
+      - 8443:443
     volumes:
-      - /opt/rancher:/var/lib/rancher      
-    restart: unless-stopped      
+      - /opt/rancher:/var/lib/rancher
+    restart: unless-stopped   

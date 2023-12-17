@@ -10,9 +10,9 @@ services:
       - PGID=1000
       - TZ=Etc/UTC
     ports:
-      - 8123:8123       
+      - 8123:8123
     volumes:
       - ./data:/config
     devices:
-      - /path/to/device:/path/to/device 
+      - /path/to/device:/path/to/device
     restart: unless-stopped

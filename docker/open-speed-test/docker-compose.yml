@@ -4,7 +4,7 @@ services:
     image: openspeedtest/latest:latest
     container_name: OpenSpeedTest
     ports:
-      - 3200:3000      
+      - 3200:3000
     command:
-     - nginx, -g , daemon off;  
+     - nginx, -g , daemon off;
     restart: unless-stopped

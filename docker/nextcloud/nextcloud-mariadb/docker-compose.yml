@@ -2,9 +2,9 @@
 services:
   mariadb:
     image: mariadb:10.6
-    container_name: mariadb  
+    container_name: mariadb
     networks:
-      - nextcloud  
+      - nextcloud
     environment:
       - MYSQL_ROOT_PASSWORD=${ROOT_PASSWORD}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
@@ -25,13 +25,13 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_HOST=db
     ports:
-      - 8080:80        
+      - 8080:80
     volumes:
       - ./nextcloud:/var/www/html
     restart: unless-stopped
     links:
       - db
-      
+
 networks:
   nextcloud:
     external: true

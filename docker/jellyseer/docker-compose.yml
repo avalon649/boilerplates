@@ -9,7 +9,7 @@ services:
        container_name: jellyseer
        environment:
             - LOG_LEVEL=info
-            - TZ=Europe/Malta
+            - TZ=Etc/UTC
             - JELLYFIN_TYPE=emby
        ports:
             - 5055:5055

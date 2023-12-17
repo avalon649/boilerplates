@@ -22,7 +22,7 @@ services:
     healthcheck:
       disable: true
     restart: unless-stopped
-    
+
 networks:
   proxy:
     external: true

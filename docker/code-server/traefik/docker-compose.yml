@@ -10,7 +10,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/Malta
+      - TZ=Etc/UTC
     volumes:
       - ./config:/config:rw
       - ./assets:/assets:rw
@@ -28,7 +28,7 @@ services:
       - "traefik.docker.network=proxy"
       - 'traefik.http.routers.codeserver-secure.middlewares=authelia@docker'
     restart: unless-stopped
-    
+
 networks:
   proxy:
     external: true
