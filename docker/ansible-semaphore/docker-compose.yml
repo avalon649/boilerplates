@@ -2,7 +2,7 @@
 volumes:
   semaphore-mysql:
     driver: local
-    
+
 services:
   mysql:
     image: mysql:8.0
