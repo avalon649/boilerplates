@@ -1,8 +1,12 @@
 ---
+networks:
+  frontend:
+    external: true
+
 services:
   watchtower:
     image: containrrr/watchtower
-    container_name: watchtower 
+    container_name: watchtower
     environment:
       - TZ=Europe/Malta
       - WATCHTOWER_DEBUG=true
@@ -10,5 +14,7 @@ services:
       - WATCHTOWER_SCHEDULE="0 30 3 * * *"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /etc/timezone:/etc/timezone:ro      
+      - /etc/timezone:/etc/timezone:ro
     restart: unless-stopped
+    networks:
+      - frontend

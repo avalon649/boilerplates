@@ -1,0 +1,20 @@
+---
+networks:
+  backend:
+    external: true
+
+services:
+    jellyseerr:
+       image: fallenbagel/jellyseerr:latest
+       container_name: jellyseer
+       environment:
+            - LOG_LEVEL=info
+            - TZ=Europe/Malta
+            - JELLYFIN_TYPE=emby
+       ports:
+            - 5055:5055
+       volumes:
+            - ./config:/app/config
+       restart: always
+       networks:
+         - backend

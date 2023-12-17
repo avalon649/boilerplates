@@ -1,0 +1,36 @@
+---
+networks:
+  frontend:
+    external: true
+
+services:
+  netbootxyz:
+    image: lscr.io/linuxserver/netbootxyz:latest
+    container_name: netbootxyz
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Malta
+    ports:
+      - 3000:3000
+      - 69:69/udp
+      - 8080:80
+    volumes:
+      - config:/config
+      - assets:/assets
+    restart: unless-stopped
+    networks:
+      - frontend
+
+volumes:
+  config:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/docker-volumes/netbootxyz/config"
+  assets:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/docker-volumes/netbootxyz/assets"
+
