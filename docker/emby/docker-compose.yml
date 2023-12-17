@@ -12,11 +12,27 @@ services:
       - GIDLIST=1000
     volumes:
       - ./config:/config
-      - ./movies:/movies
-      - ./series:/series
+      - movies:/movies
+      - series:/series
     ports:
       - 8096:8096
       - 8920:8920
     devices:
       - /dev/dri:/dev/dri
     restart: unless-stopped
+
+volumes:
+  movies:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/movies"
+  series:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/series"
+
+networks:
+  backend:
+    external: true
