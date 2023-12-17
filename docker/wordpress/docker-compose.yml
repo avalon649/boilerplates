@@ -8,6 +8,8 @@ services:
       WORDPRESS_DB_USER: ${DB_USER}
       WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
       WORDPRESS_DB_NAME: ${DB_NAME}
+    env_file:
+      - .env      
     ports:
       - 8080:80
     volumes:
@@ -22,6 +24,8 @@ services:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_RANDOM_ROOT_PASSWORD: ${ROOT_PASSWORD}
+    env_file:
+      - .env      
     volumes:
       - db:/var/lib/mysql
     restart: always
