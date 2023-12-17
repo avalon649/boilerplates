@@ -1,0 +1,23 @@
+---
+services:
+  subsonic:
+    image: gzurowski/subsonic
+    container_name: subsonic
+    ports:
+      - 4040:4040  
+    volumes:
+      - ./config:/var/subsonic
+      - music:/var/music:ro
+    restart: unless-stopped  
+
+volumes:
+  config:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/docker-volumes/subsonic" 
+  music:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/music"       

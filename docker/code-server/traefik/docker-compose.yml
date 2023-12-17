@@ -4,7 +4,6 @@ services:
   code-server:
     image: lscr.io/linuxserver/code-server
     container_name: code-server
-    restart: unless-stopped
     networks:
       - proxy
     user: root:root
@@ -28,7 +27,8 @@ services:
       - "traefik.http.services.codeserver.loadbalancer.server.port=8443"
       - "traefik.docker.network=proxy"
       - 'traefik.http.routers.codeserver-secure.middlewares=authelia@docker'
-
+    restart: unless-stopped
+    
 networks:
   proxy:
     external: true

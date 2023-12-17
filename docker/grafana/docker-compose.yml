@@ -1,5 +1,4 @@
-version: '3'
-
+---
 volumes:
   grafana-data:
     driver: local
@@ -7,12 +6,12 @@ volumes:
 services:
   grafana:
     image: grafana/grafana-oss:latest
-  container_name: grafana
-      environment:
+    container_name: grafana
+    environment:
       - PUID=1000
       - PGID=1000
     ports:
       - "3000:3000"
     volumes:
-      - /home/serveradmin/grafana:/var/lib/grafana #chown 472.472 -R /home/serveradmin/grafana
+      - ./grafana:/var/lib/grafana #chown 472.472 -R /home/serveradmin/grafana
     restart: unless-stopped

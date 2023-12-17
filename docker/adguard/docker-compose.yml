@@ -1,14 +1,9 @@
-version: "3"
-
+---
 services:
   adguard:
     image: adguard/adguardhome
     container_name: adguard
-    network_mode: "host"
-    restart: unless-stopped
-    volumes:
-      - ./work:/opt/adguardhome/work
-      - ./config:/opt/adguardhome/conf
+    network_mode: "host"    
     ports:
       - 53:53/tcp
       - 67:67/udp
@@ -20,3 +15,7 @@ services:
       - 784:784/udp
       - 5443:5443/tcp
       - 5443:5443/udp
+    volumes:
+      - ./work:/opt/adguardhome/work
+      - ./config:/opt/adguardhome/conf
+    restart: unless-stopped

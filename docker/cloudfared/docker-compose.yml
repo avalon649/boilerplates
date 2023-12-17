@@ -1,5 +1,4 @@
-version: '3.9'
-
+---
 networks:
   frontend:
     external: true
@@ -12,7 +11,7 @@ services:
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
     environment:
-      - TUNNEL_TOKEN=$TUNNEL_TOKEN
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
     command: tunnel --no-autoupdate run
     networks:
       - frontend

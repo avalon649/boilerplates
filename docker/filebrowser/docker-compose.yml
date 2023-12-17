@@ -1,13 +1,9 @@
-version: "3"
-
+---
 services:
   filebrowser:
     image: hurlenko/filebrowser
     container_name: filebrowser
-    restart: unless-stopped
     user: root:root
-    networks:
-      - proxy
     environment:
       - FB_BASEURL=/
     volumes:
@@ -15,7 +11,4 @@ services:
       - ./config:/config
     ports:
       - 8089:8080  
-
-networks:
-  proxy:
-    external: true
+    restart: unless-stopped

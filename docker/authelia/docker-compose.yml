@@ -1,9 +1,10 @@
-version: '3'
-
+---
 services:
   authelia:
     image: authelia/authelia
     container_name: authelia
+    environment:
+      - TZ=Etc/UTC 
     volumes:
       - ./config:/config
     networks:
@@ -18,11 +19,10 @@ services:
       - 'traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email'
     expose:
       - 9091
-    restart: unless-stopped
-    environment:
-      - TZ=Europe/Malta
     healthcheck:
       disable: true
+    restart: unless-stopped
+    
 networks:
   proxy:
     external: true

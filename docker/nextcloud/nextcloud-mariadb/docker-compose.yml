@@ -1,39 +1,37 @@
-version: "3"
-
+---
 services:
-  nextcloud:
-    image: lscr.io/linuxserver/nextcloud
-    container_name: nextcloud
-    restart: unless-stopped
-    networks:
-      - proxy
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/Malta
-    volumes:
-      - ./appdata:/config
-      - ./data:/data
-    ports:
-      - 9443:443  
-
   mariadb:
-    image: lscr.io/linuxserver/mariadb
-    container_name: mariadb
-    restart: unless-stopped  
+    image: mariadb:10.6
+    container_name: mariadb  
     networks:
-      - proxy  
+      - nextcloud  
     environment:
-      - PUID=1000
-      - PGID=1000
-      - MYSQL_ROOT_PASSWORD=1234567890
-      - TZ=Europe/Malta
-      - MYSQL_DATABASE=nextcloud_db
-      - MYSQL_USER=nextcloud
-      - MYSQL_PASSWORD=1234567890
+      - MYSQL_ROOT_PASSWORD=${ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
     volumes:
       - ./mariadb/config:/config
+    restart: unless-stopped
+
+  nextcloud:
+    image: nextcloud
+    container_name: nextcloud
+    networks:
+      - nextcloud
+    environment:
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_HOST=db
+    ports:
+      - 8080:80        
+    volumes:
+      - ./nextcloud:/var/www/html
+    restart: unless-stopped
+    links:
+      - db
       
 networks:
-  proxy:
+  nextcloud:
     external: true

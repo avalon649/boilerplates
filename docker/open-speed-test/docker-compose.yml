@@ -1,17 +1,10 @@
-version: "3"
-
+---
 services:
   OpenSpeedTest:
     image: openspeedtest/latest:latest
     container_name: OpenSpeedTest
-    restart: unless-stopped
-    networks:
-     - proxy
     ports:
-      - 3200:3000
+      - 3200:3000      
     command:
      - nginx, -g , daemon off;  
-
-networks:
-  proxy:
-    external: true
+    restart: unless-stopped

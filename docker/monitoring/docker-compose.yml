@@ -1,5 +1,4 @@
-version: '3'
-
+---
 volumes:
   prometheus-data:
     driver: local
@@ -37,13 +36,13 @@ services:
     container_name: node_exporter
     networks:
       - monitoring
-    command:
-      - '--path.rootfs=/host'
     pid: host
     restart: unless-stopped
     volumes:
       - '/:/host:ro,rslave'
-      
+    command:
+      - '--path.rootfs=/host'
+            
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.45.0  
     container_name: cadvisor

@@ -1,31 +1,17 @@
-version: "3.8"
-
+---
 services:
   nzbget:
     image: lscr.io/linuxserver/nzbget:latest
     container_name: nzbget
-    restart: unless-stopped
-    networks:
-      - proxy
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/Malta
-      - NZBGET_USER=avalon649 #optional
-      - NZBGET_PASS=Jj8zLEXc5MpFLa #optional
+      - TZ=Etc/UTC
+      - NZBGET_USER=${NZBGET_USER} 
+      - NZBGET_PASS=${NZBGET_PASS}
+    ports:
+      - 6789:6789      
     volumes:
       - ./config:/config
-      - downloads:/downloads #optional
-    ports:
-      - 6789:6789
-
-volumes:
-  downloads:
-    driver_opts:
-      type: "nfs"
-      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
-      device: ":/mnt/storage0/plex/downloads"
-
-networks:
-  proxy:
-    external: true
+      - downloads:/downloads 
+    restart: unless-stopped

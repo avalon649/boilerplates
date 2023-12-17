@@ -1,25 +1,18 @@
-version: "3.3"
+---
+volumes:
+  nginx-config: 
 
 services:
   nginx:
     image: lscr.io/linuxserver/nginx
     container_name: nginx
-    restart: unless-stopped
-    networks:
-      - nginx
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/Malta
-    volumes:
-      - nginx-config:/config
+      - TZ=Etc/UTC
     ports:
       - 8085:80
       - 5443:443
-
-networks:
-  nginx:
-    external: true
-
-volumes:
-  nginx-config: 
+    volumes:
+      - ./config:/config      
+    restart: unless-stopped

@@ -1,17 +1,10 @@
-version: "3"
-
+---
 services:
   guacamole:
     image: oznu/guacamole
     container_name: guacamole
-    restart: unless-stopped
-    networks:
-      - proxy    
-    volumes:
-      - ./config:/config
     ports:
      - 8080:8080
-
-networks:
-  proxy:
-    external: true
+    volumes:
+      - ./config:/config     
+    restart: unless-stopped

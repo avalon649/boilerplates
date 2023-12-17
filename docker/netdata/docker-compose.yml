@@ -1,10 +1,13 @@
-version: '3'
+---
+volumes:
+  netdataconfig:
+  netdatalib:
+  netdatacache:
 
 services:
   netdata:
     image: netdata/netdata
     container_name: netdata
-    restart: unless-stopped
     hostname: netdata.local.example.com # set to fqdn of host
     ports:
       - 19999:19999
@@ -21,8 +24,4 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /etc/os-release:/host/etc/os-release:ro
-
-volumes:
-  netdataconfig:
-  netdatalib:
-  netdatacache:
+    restart: unless-stopped

@@ -1,10 +1,8 @@
-version: '3'
-
+---
 networks:
   graynet:
     driver: bridge
 
-# This is how you persist data between container restarts
 volumes:
   mongo_data:
     driver: local
@@ -14,17 +12,15 @@ volumes:
     driver: local
 
 services:
-  # Graylog stores configuration in MongoDB
   mongo:
     image: mongo:6.0.5-jammy
     container_name: mongodb
     volumes:
       - "mongo_data:/data/db"
     networks:
-      - graynet
+      - backend
     restart: unless-stopped
 
-  # The logs themselves are stored in Opensearch
   opensearch:
     image: opensearchproject/opensearch:2
     container_name: opensearch
@@ -47,42 +43,40 @@ services:
     ports:
       - 9200:9200/tcp
     networks:
-      - graynet
+      - backend
     restart: unless-stopped
 
   graylog:
     image: graylog/graylog:5.0
     container_name: graylog
     environment:
-      # CHANGE ME (must be at least 16 characters)!
-      GRAYLOG_PASSWORD_SECRET: "somepasswordpepper"
-      # Password: admin
-      GRAYLOG_ROOT_PASSWORD_SHA2: "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
-      GRAYLOG_HTTP_BIND_ADDRESS: "0.0.0.0:9000"
-      GRAYLOG_HTTP_EXTERNAL_URI: "http://localhost:9000/"
-      GRAYLOG_ELASTICSEARCH_HOSTS: "http://opensearch:9200"
-      GRAYLOG_MONGODB_URI: "mongodb://mongodb:27017/graylog"
-      GRAYLOG_TIMEZONE: "America/Detroit"
-      TZ: "America/Detroit"
-      GRAYLOG_TRANSPORT_EMAIL_PROTOCOL: "smtp"
-      GRAYLOG_TRANSPORT_EMAIL_WEB_INTERFACE_URL: "http://192.168.3.233:9000/"
-      GRAYLOG_TRANSPORT_EMAIL_HOSTNAME: "outbound.mailhop.org"
-      GRAYLOG_TRANSPORT_EMAIL_ENABLED: "true"
-      GRAYLOG_TRANSPORT_EMAIL_PORT: "587"
-      GRAYLOG_TRANSPORT_EMAIL_USE_AUTH: "true"
-      GRAYLOG_TRANSPORT_EMAIL_AUTH_USERNAME: "xxxxx"
-      GRAYLOG_TRANSPORT_EMAIL_AUTH_PASSWORD: "xxxxx"
-      GRAYLOG_TRANSPORT_EMAIL_USE_TLS: "true"
-      GRAYLOG_TRANSPORT_EMAIL_USE_SSL: "false"
-      GRAYLOG_TRANSPORT_FROM_EMAIL: "graylog@example.com"
-      GRAYLOG_TRANSPORT_SUBJECT_PREFIX: "[graylog]"
+      GRAYLOG_PASSWORD_SECRET: ${PASSWORD_SECRET}
+      GRAYLOG_ROOT_PASSWORD_SHA2: ${PASSWORD_SHA2}
+      GRAYLOG_HTTP_BIND_ADDRESS: ${BIND_ADDRESS}
+      GRAYLOG_HTTP_EXTERNAL_URI: ${EXTERNAL_URI}
+      GRAYLOG_ELASTICSEARCH_HOSTS: ${ELASTICSEARCH_HOSTS}
+      GRAYLOG_MONGODB_URI: ${MONGODB_URI}
+      GRAYLOG_TIMEZONE: ${TIMEZONE}
+      TZ: "Europe/Malta"
+      GRAYLOG_TRANSPORT_EMAIL_PROTOCOL: ${EMAIL_PROTOCOL}
+      GRAYLOG_TRANSPORT_EMAIL_WEB_INTERFACE_URL: ${WEB_INTERFACE_URL}
+      GRAYLOG_TRANSPORT_EMAIL_HOSTNAME: ${EMAIL_HOSTNAME}
+      GRAYLOG_TRANSPORT_EMAIL_ENABLED: ${EMAIL_ENABLED}
+      GRAYLOG_TRANSPORT_EMAIL_PORT: ${EMAIL_PORT}
+      GRAYLOG_TRANSPORT_EMAIL_USE_AUTH: ${EMAIL_USE_AUTH}
+      GRAYLOG_TRANSPORT_EMAIL_AUTH_USERNAME: ${EMAIL_AUTH_USERNAME}
+      GRAYLOG_TRANSPORT_EMAIL_AUTH_PASSWORD: ${EMAIL_AUTH_PASSWORD}
+      GRAYLOG_TRANSPORT_EMAIL_USE_TLS: ${EMAIL_USE_TLS}
+      GRAYLOG_TRANSPORT_EMAIL_USE_SSL: ${EMAIL_USE_SSL}
+      GRAYLOG_TRANSPORT_FROM_EMAIL: ${FROM_EMAIL}
+      GRAYLOG_TRANSPORT_SUBJECT_PREFIX: ${SUBJECT_PREFIX}
 
     entrypoint: /usr/bin/tini -- wait-for-it opensearch:9200 -- /docker-entrypoint.sh
     volumes:
-      - "${PWD}/config/graylog/graylog.conf:/usr/share/graylog/config/graylog.conf"
+      - "./config/graylog/graylog.conf:/usr/share/graylog/config/graylog.conf"
       - "graylog_data:/usr/share/graylog/data"
     networks:
-      - graynet
+      - backend
     restart: always
     depends_on:
       opensearch:
