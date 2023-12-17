@@ -1,16 +1,14 @@
-version: "3"
-
+---
 services:
   vaultwarden:
     image: vaultwarden/server:latest
     container_name: vaultwarden
-    restart: unless-stopped
     networks:
       - proxy     
     volumes:
       - ./data:/data
     environment:
-      - ADMIN_TOKEN=1234567890
+      - ADMIN_TOKEN=${ADMIN_TOKEN}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.vaultwarden.entrypoints=http"
@@ -24,6 +22,8 @@ services:
       - "traefik.http.services.vaultwarden.loadbalancer.server.port=80"
       - "traefik.docker.network=proxy"
       - 'traefik.http.routers.vaultwarden-secure.middlewares=authelia@docker'
+    restart: unless-stopped
+
 networks:
   proxy:
     external: true 

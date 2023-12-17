@@ -1,14 +1,13 @@
-version: '3'
-
+---
 services:
   uptime-kuma:
     image: louislam/uptime-kuma
     container_name: uptime-kuma
-    restart: unless-stopped
     networks:
       - proxy
     volumes:
       - ./data:/app/data
+
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.uptime-kuma.entrypoints=http"
@@ -21,6 +20,7 @@ services:
       - "traefik.http.routers.uptime-kuma-secure.service=uptime-kuma"
       - "traefik.http.services.uptime-kuma.loadbalancer.server.port=3001"
       - "traefik.docker.network=proxy"
+    restart: unless-stopped
 
 networks:
   proxy:

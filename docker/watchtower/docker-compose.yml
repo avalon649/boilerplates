@@ -1,12 +1,8 @@
-version: "3"
-
+---
 services:
   watchtower:
     image: containrrr/watchtower
     container_name: watchtower 
-    restart: unless-stopped
-    networks:
-      - proxy
     environment:
       - TZ=Europe/Malta
       - WATCHTOWER_DEBUG=true
@@ -15,7 +11,4 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/timezone:/etc/timezone:ro      
-
-networks:
-  proxy:
-    external: true  
+    restart: unless-stopped
