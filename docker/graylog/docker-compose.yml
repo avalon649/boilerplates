@@ -1,6 +1,6 @@
 ---
 networks:
-  graynet:
+  backend:
     driver: bridge
 
 volumes:
@@ -14,7 +14,7 @@ volumes:
 services:
   mongo:
     image: mongo:6.0.5-jammy
-    container_name: mongodb
+    container_name: mongodb    
     volumes:
       - "mongo_data:/data/db"
     networks:
@@ -57,7 +57,6 @@ services:
       GRAYLOG_ELASTICSEARCH_HOSTS: ${ELASTICSEARCH_HOSTS}
       GRAYLOG_MONGODB_URI: ${MONGODB_URI}
       GRAYLOG_TIMEZONE: ${TIMEZONE}
-      TZ: "Europe/Malta"
       GRAYLOG_TRANSPORT_EMAIL_PROTOCOL: ${EMAIL_PROTOCOL}
       GRAYLOG_TRANSPORT_EMAIL_WEB_INTERFACE_URL: ${WEB_INTERFACE_URL}
       GRAYLOG_TRANSPORT_EMAIL_HOSTNAME: ${EMAIL_HOSTNAME}
@@ -71,8 +70,7 @@ services:
       GRAYLOG_TRANSPORT_FROM_EMAIL: ${FROM_EMAIL}
       GRAYLOG_TRANSPORT_SUBJECT_PREFIX: ${SUBJECT_PREFIX}
     env_file:
-      - .env
-      
+      - .env      
     entrypoint: /usr/bin/tini -- wait-for-it opensearch:9200 -- /docker-entrypoint.sh
     volumes:
       - "./config/graylog/graylog.conf:/usr/share/graylog/config/graylog.conf"
