@@ -36,7 +36,7 @@ services:
       - SEMAPHORE_ACCESS_KEY_ENCRYPTION=${KEY_ENCRYPTION}
       - ANSIBLE_HOST_KEY_CHECKING=false
     env_file:
-      - .env      
+      - .env
     volumes:
       - ./inventory/:/inventory:ro
       - ./authorized-keys/:/authorized-keys:ro
