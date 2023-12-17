@@ -29,12 +29,14 @@ services:
       - SEMAPHORE_DB_DIALECT=mysql
       - SEMAPHORE_DB=semaphore
       - SEMAPHORE_PLAYBOOK_PATH=/tmp/semaphore/
-      - SEMAPHORE_ADMIN_PASSWORD=${ADMIN_PASSWORD} 
+      - SEMAPHORE_ADMIN_PASSWORD=${ADMIN_PASSWORD}
       - SEMAPHORE_ADMIN_NAME=${ADMIN_NAME}
       - SEMAPHORE_ADMIN_EMAIL=${ADMIN_EMAIL}
       - SEMAPHORE_ADMIN=${ADMIN}
-      - SEMAPHORE_ACCESS_KEY_ENCRYPTION=${KEY_ENCRYPTION}  
-      - ANSIBLE_HOST_KEY_CHECKING=false  
+      - SEMAPHORE_ACCESS_KEY_ENCRYPTION=${KEY_ENCRYPTION}
+      - ANSIBLE_HOST_KEY_CHECKING=false
+    env_file:
+      - .env      
     volumes:
       - ./inventory/:/inventory:ro
       - ./authorized-keys/:/authorized-keys:ro
@@ -42,4 +44,3 @@ services:
     restart: unless-stopped
     depends_on:
       - mysql
-      
