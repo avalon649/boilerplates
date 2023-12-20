@@ -4,7 +4,7 @@
 Self Note
 
 ```
-Due to Mongodb Architecrure incompatibilities , VM Type must set as `Host`
+Due to Mongodb Architecrure incompatibilities with AMD , VM Type must set as `Host`
 ```
 Make sure timezone is set to UTC
 
