@@ -1,5 +1,11 @@
 ### Graylog Installation Guide
 
+
+Self Note
+
+```
+Due to Mongodb Architecrure incompatibilities , VM Type must set as `Host`
+```
 Make sure timezone is set to UTC
 
 ```bash
