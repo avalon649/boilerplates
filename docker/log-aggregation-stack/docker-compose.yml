@@ -1,0 +1,111 @@
+---
+volumes:
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    networks:
+      - monitoring
+    ports:
+      - "9090:9090"
+    volumes:
+      - /etc/prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    restart: unless-stopped
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    networks:
+      - monitoring
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    networks:
+      - monitoring
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
+    command:
+      - '--path.rootfs=/host'
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.45.0
+    container_name: cadvisor
+    # ports:
+    #   - "8080:8080"
+    networks:
+      - monitoring
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+    restart: unless-stopped
+
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    networks:
+      - monitoring
+    ports:
+      - '8086:8086'
+    volumes:
+      - /home/serveradmin/monitoring/influxdb2:/var/lib/influxdb2
+      - /home/serveradmin/monitoring/influxdb2/certs:/etc/ssl
+      - /etc/influxdb2:/etc/influxdb2
+      # # (optional) If you're using self-signed certs
+      # - /etc/ssl/cert.pem/:/etc/ssl/cert.pem
+      # - /etc/ssl/cert-key.pem/:/etc/ssl/cert-key.pem
+    # # Automatically setup influxdb
+    # TODO: no tested...
+    # environment:
+    #   - DOCKER_INFLUXDB_INIT_MODE=setup
+    #   - DOCKER_INFLUXDB_INIT_USERNAME=my-user
+    #   - DOCKER_INFLUXDB_INIT_PASSWORD=my-password
+    #   - DOCKER_INFLUXDB_INIT_ORG=my-org
+    #   - DOCKER_INFLUXDB_INIT_BUCKET=my-bucket
+    # # (optional) Configure Data Retention
+    #   - DOCKER_INFLUXDB_INIT_RETENTION=1w
+    # # (optional) Admin Token
+    #   - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token
+    # # (optional) If you're using self-signed certs
+    command: influxd --tls-cert=/etc/ssl/cert.pem --tls-key=/etc/ssl/cert-key.pem
+
+  nvidia_smi_exporter: #To export data from nvidia-smi, needs nvidia-smi and nvidia-container-toolkit installed on host.
+    image: utkuozdemir/nvidia_gpu_exporter:0.3.0
+    container_name: nvidia_smi_exporter
+    networks:
+     - monitoring
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+    ports:
+      - "9835:9835"
+    volumes:
+      - /usr/bin/nvidia-smi:/usr/bin/nvidia-smi
+      - /usr/lib/x86_64-linux-gnu/libnvidia-ml.so:/usr/lib/x86_64-linux-gnu/libnvidia-ml.so
+      - /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1:/usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1
+    restart: unless-stopped
+
+networks:
+  monitoring:
+    external: true
