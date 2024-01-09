@@ -1,6 +1,6 @@
 ---
 networks:
-  loki:
+  aggregation-stack:
 services:
   loki:
     image: grafana/loki:latest
