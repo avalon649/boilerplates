@@ -4,8 +4,6 @@ services:
     image: emby/embyserver
     container_name: embyserver
     runtime: nvidia
-    networks:
-      - backend
     environment:
       - UID=1000
       - GID=1000
