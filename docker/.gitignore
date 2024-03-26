@@ -1,4 +1,7 @@
 
+/ansible-semaphore/.env
+/immich/.env
 /plex/.env
+/traefik/.env
 /wordpress/.env
 
