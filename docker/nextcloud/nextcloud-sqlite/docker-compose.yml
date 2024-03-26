@@ -7,10 +7,10 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-    ports:
-      - 9443:443
     volumes:
       - ./appdata:/config
       - ./data:/data
       - local:/local:rw
-    restart: always
+    ports:
+      - 9443:443
+    restart: unless-stopped

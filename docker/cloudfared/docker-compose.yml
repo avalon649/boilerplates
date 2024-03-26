@@ -1,15 +1,15 @@
 ---
-networks:
-  backend:
-    external: true
-
 services:
   cloudflaretunnel:
-    container_name: cloudflaretunnel-demo-1
     image: cloudflare/cloudflared:latest
-    restart: unless-stopped
+    container_name: cloudflaretunnel-demo-1
     environment:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
     command: tunnel --no-autoupdate run
     networks:
       - backend
+    restart: unless-stopped
+
+networks:
+  backend:
+    external: true

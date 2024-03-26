@@ -1,8 +1,8 @@
 ---
 services:
   bind9:
-    container_name: bind9
     image: ubuntu/bind9:latest
+    container_name: bind9
     environment:
       - BIND9_USER=root
       - TZ=Etc/UTC

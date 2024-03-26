@@ -3,12 +3,12 @@ services:
   authelia:
     image: authelia/authelia
     container_name: authelia
+    networks:
+      - proxy
     environment:
       - TZ=Etc/UTC 
     volumes:
       - ./config:/config
-    networks:
-      - proxy
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.authelia.rule=Host(`auth.example.com`)'

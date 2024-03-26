@@ -3,11 +3,10 @@ services:
   uptime-kuma:
     image: louislam/uptime-kuma
     container_name: uptime-kuma
-    networks:
-      - proxy
     volumes:
       - ./data:/app/data
-
+    networks:
+      - proxy
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.uptime-kuma.entrypoints=http"

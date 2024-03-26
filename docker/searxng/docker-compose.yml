@@ -18,8 +18,6 @@ services:
   searxng:
     container_name: searxng
     image: searxng/searxng:latest
-    ports:
-      - "8088:8080"
     environment:
       - SEARXNG_BASE_URL=https://searxng.example.com
     cap_drop:
@@ -35,6 +33,8 @@ services:
         max-file: "1"
     volumes:
       - ./searxng:/etc/searxng:rw
+    ports:
+      - "8088:8080"
 
 volumes:
   redis-data:

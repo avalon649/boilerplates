@@ -1,10 +1,8 @@
-version: "3"
-
+---
 services:
   librespeed:
     image: lscr.io/linuxserver/librespeed
     container_name: librespeed
-    restart: unless-stopped
     networks:
       - proxy     
     environment:
@@ -26,6 +24,7 @@ services:
       - "traefik.http.routers.librespeed-secure.service=librespeed"
       - "traefik.http.services.librespeed.loadbalancer.server.port=80"
       - "traefik.docker.network=proxy"
+    restart: unless-stopped
 
 networks:
   proxy:

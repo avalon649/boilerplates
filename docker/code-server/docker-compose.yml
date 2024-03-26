@@ -13,4 +13,4 @@ services:
     volumes:
       - ./config:/config:rw
       - ./assets:/assets:rw
-    restart: always
+    restart: unless-stopped

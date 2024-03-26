@@ -1,9 +1,8 @@
 ---
-networks:
-  aggregation-stack:
 services:
   loki:
-    image: grafana/loki:latest
+    image: grafana/loki:latest\
+    container_name: loki
     volumes:
       - ./loki:/etc/loki
     ports:
@@ -12,6 +11,7 @@ services:
     command: -config.file=/etc/loki/loki-config.yml
     networks:
       - aggregation-stack
+
   promtail:
     image: grafana/promtail:latest
     volumes:
@@ -23,8 +23,10 @@ services:
     command: -config.file=/etc/promtail/promtail-config.yml
     networks:
       - aggregation-stack
+
   grafana:
     image: grafana/grafana:latest
+    container_name: grafana
     user: "1000"
     volumes:
     - ./grafana:/var/lib/grafana
@@ -33,3 +35,6 @@ services:
     restart: unless-stopped
     networks:
       - aggregation-stack
+
+networks:
+  aggregation-stack:

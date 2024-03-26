@@ -9,9 +9,9 @@ services:
       - TZ=Etc/UTC
       - NZBGET_USER=username
       - NZBGET_PASS=password
-    ports:
-      - 6789:6789
     volumes:
       - ./config:/config
       - ./downloads:/downloads
+    ports:
+      - 6789:6789
     restart: unless-stopped

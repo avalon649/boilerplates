@@ -9,9 +9,26 @@ services:
       - PGID=1000
       - VERSION=docker
       - NVIDIA_VISIBLE_DEVICES=all
-      - PLEX_CLAIM=$PLEX_CLAIM
+      - PLEX_CLAIM=claim-M-zzVALZ_keueGMpU7Fs
     volumes:
-      - ./config:/config
-      - ./tvseries:/tv
-      - ./movies:/movies
-    restart: always
+      - config:/config
+      - movies:/movies
+      - series:/series
+    restart: unless-stopped
+
+volumes:
+  config:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/docker-volumes/plex/config"
+  movies:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/movies"
+  series:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/series"
