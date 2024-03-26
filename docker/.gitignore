@@ -3,5 +3,6 @@
 /immich/.env
 /plex/.env
 /traefik/.env
+vaultwarden/.env
 /wordpress/.env
 
