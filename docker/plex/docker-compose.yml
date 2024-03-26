@@ -9,11 +9,13 @@ services:
       - PGID=1000
       - VERSION=docker
       - NVIDIA_VISIBLE_DEVICES=all
-      - PLEX_CLAIM=claim-M-zzVALZ_keueGMpU7Fs
+      - PLEX_CLAIM=${PLEX_CLAIM}
     volumes:
       - config:/config
       - movies:/movies
       - series:/series
+    env_file:
+      - .env           
     restart: unless-stopped
 
 volumes:
