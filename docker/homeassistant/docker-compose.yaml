@@ -1,5 +1,4 @@
 ---
-version: "2.1"
 services:
   homeassistant:
     image: lscr.io/linuxserver/homeassistant:latest

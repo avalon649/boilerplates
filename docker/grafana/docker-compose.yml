@@ -1,8 +1,4 @@
 ---
-volumes:
-  grafana-data:
-    driver: local
-
 services:
   grafana:
     image: grafana/grafana-oss:latest
@@ -15,3 +11,7 @@ services:
     volumes:
       - ./grafana:/var/lib/grafana #chown 472.472 -R /home/serveradmin/grafana
     restart: unless-stopped
+
+volumes:
+  grafana-data:
+    driver: local

@@ -3,8 +3,6 @@ services:
   vaultwarden:
     image: vaultwarden/server:latest
     container_name: vaultwarden
-    networks:
-      - proxy
     volumes:
       - ./data:/data
     environment:
@@ -23,6 +21,8 @@ services:
       - "traefik.docker.network=proxy"
       - 'traefik.http.routers.vaultwarden-secure.middlewares=authelia@docker'
     restart: unless-stopped
+    networks:
+      - proxy
 
 networks:
   proxy:

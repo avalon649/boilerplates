@@ -1,10 +1,8 @@
-version: "3.3"
-
+---
 services:
   rancher:
     image: rancher/rancher:latest
     container_name: rancher
-    restart: unless-stopped
     privileged: true
     environment:
      - SSL_CERT_DIR="/container/certs"
@@ -16,3 +14,4 @@ services:
     ports:
      - 8080:80
      - 8443:443
+    restart: unless-stopped

@@ -7,10 +7,10 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-    ports:
-      - 8787:8787
     volumes:
       - ./config:/config
       - ./books:/books
       - ./downloads:/downloads
+    ports:
+      - 8787:8787
     restart: unless-stopped

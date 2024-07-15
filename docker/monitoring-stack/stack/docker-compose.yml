@@ -1,0 +1,97 @@
+---
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus  
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    volumes:
+      - /etc/prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    volumes:
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter  
+    command:
+      - '--path.rootfs=/host'
+    pid: host
+    volumes:
+      - '/:/host:ro,rslave'
+    restart: unless-stopped
+
+  cadvisor:
+    image: google/cadvisor:latest
+    container_name: cadvisor  
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    # ports:
+    #   - "8080:8080"
+    devices:
+      - /dev/kmsg
+    restart: unless-stopped
+ 
+  influxdb:
+    image: influxdb:2.1-alpine
+    container_name: influxdb
+    command: influxd --tls-cert=/etc/ssl/cert.pem --tls-key=/etc/ssl/cert-key.pem
+    volumes:
+      - /home/serveradmin/influxdb2:/var/lib/influxdb2
+      - /etc/influxdb2:/etc/influxdb2
+      # # (optional) If you're using self-signed certs
+      # - /etc/ssl/cert.pem/:/etc/ssl/cert.pem
+      # - /etc/ssl/cert-key.pem/:/etc/ssl/cert-key.pem
+    ports:
+      - '8086:8086'
+    # # Automatically setup influxdb
+    # TODO: no tested...
+    # environment:
+    #   - DOCKER_INFLUXDB_INIT_MODE=setup
+    #   - DOCKER_INFLUXDB_INIT_USERNAME=my-user
+    #   - DOCKER_INFLUXDB_INIT_PASSWORD=my-password
+    #   - DOCKER_INFLUXDB_INIT_ORG=my-org
+    #   - DOCKER_INFLUXDB_INIT_BUCKET=my-bucket
+    # # (optional) Configure Data Retention
+    #   - DOCKER_INFLUXDB_INIT_RETENTION=1w
+    # # (optional) Admin Token
+    #   - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token
+    # # (optional) If you're using self-signed certs
+    restart: unless-stopped
+
+  nvidia_smi_exporter:
+    image: utkuozdemir/nvidia_gpu_exporter:0.3.0
+    container_name: nvidia_smi_exporter 
+    networks:
+     - monitoring
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+    volumes:
+      - /usr/bin/nvidia-smi:/usr/bin/nvidia-smi
+      - /usr/lib/x86_64-linux-gnu/libnvidia-ml.so:/usr/lib/x86_64-linux-gnu/libnvidia-ml.so
+      - /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1:/usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1
+    ports:
+      - "9835:9835"
+    restart: unless-stopped
+
+volumes:
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local

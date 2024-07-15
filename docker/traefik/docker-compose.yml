@@ -9,18 +9,18 @@ services:
       - CF_API_KEY=${API_KEY}   
     security_opt:
       - no-new-privileges:true
-    networks:
-      - proxy
-    ports:
-      - 80:80
-      - 443:443
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./data/traefik.yml:/traefik.yml:ro
       - ./data/acme.json:/acme.json
       - ./data/config.yml:/config.yml:ro
+    ports:
+      - 80:80
+      - 443:443
     restart: unless-stopped
+    networks:
+      - proxy
 
     labels:
       - "traefik.enable=true"

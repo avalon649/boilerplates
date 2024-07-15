@@ -10,10 +10,10 @@ services:
       WORDPRESS_DB_NAME: ${DB_NAME}
     env_file:
       - .env
-    ports:
-      - 8080:80
     volumes:
       - wordpress:/var/www/html
+    ports:
+      - 8080:80
     restart: always
 
   db:
@@ -28,6 +28,8 @@ services:
       - .env
     volumes:
       - db:/var/lib/mysql
+    # ports:
+    #   - 3306:3306  
     restart: always
 
 volumes:

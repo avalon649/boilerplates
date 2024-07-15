@@ -1,10 +1,8 @@
-version: "3"
-
+---
 services:
   heimdall:
     image: lscr.io/linuxserver/heimdall
     container_name: heimdall
-    restart: unless-stopped
     networks:
       - proxy  
     environment:
@@ -26,6 +24,8 @@ services:
       - "traefik.http.services.heimdall.loadbalancer.server.port=80"
       - "traefik.docker.network=proxy"
       - 'traefik.http.routers.heimdall-secure.middlewares=authelia@docker'
+    restart: unless-stopped
+
 networks:
   proxy:
     external: true

@@ -4,7 +4,6 @@ services:
   guacamole:
     image: oznu/guacamole
     container_name: guacamole
-    restart: unless-stopped
     networks:
       - proxy    
     volumes:
@@ -22,6 +21,7 @@ services:
       - "traefik.http.services.guacamole.loadbalancer.server.port=8080"
       - "traefik.docker.network=proxy"
       - 'traefik.http.routers.guacamole-secure.middlewares=authelia@docker'
+    restart: unless-stopped
 
 networks:
   proxy:

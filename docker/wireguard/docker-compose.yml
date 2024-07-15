@@ -17,11 +17,11 @@ services:
       - INTERNAL_SUBNET=10.13.13.0 #optional
       - ALLOWEDIPS=0.0.0.0/0 #optional
       - LOG_CONFS=true #optional
-    ports:
-      - 51820:51820/udp
     volumes:
       - /path/to/appdata/config:/config
       - /lib/modules:/lib/modules
+    ports:
+      - 51820:51820/udp
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
     restart: unless-stopped
