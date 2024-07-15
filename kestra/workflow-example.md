@@ -40,6 +40,7 @@ tasks:
         type: io.kestra.plugin.ansible.cli.AnsibleCLI
         commands:
           - ansible-playbook -i inventory/homelab --key-file id_rsa --extra-vars "hosts={{ inputs.host }}" "{{ inputs.playbooks }}"
+          #playbooks/maintainance/check-disk-space.yaml
         docker:
           image: cytopia/ansible:latest-tools
           pullPolicy: IF_NOT_PRESENT
