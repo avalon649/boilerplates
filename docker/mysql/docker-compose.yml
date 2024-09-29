@@ -4,10 +4,10 @@ services:
     image: mysql:latest
     container_name: mysql
     environment:
-      - MYSQL_DATABASE: "my_db"
-      - MYSQL_USER: "admin"
-      - MYSQL_PASSWORD: "p@55w0rd"
-      - MYSQL_ROOT_PASSWORD: "p@55w0rd"
+      - MYSQL_DATABASE: my_db
+      - MYSQL_USER: admin
+      - MYSQL_PASSWORD: p@55w0rd
+      - MYSQL_ROOT_PASSWORD: p@55w0rd
     volumes:
       - mysql:/var/lib/mysql
     ports:
@@ -16,8 +16,9 @@ services:
     networks:
       - mysql
 
+volumes:
+  mysql:
 networks:
   mysql:
     external: true
-volumes:
-  mysql:
+
