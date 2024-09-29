@@ -1,0 +1,16 @@
+---
+services:
+  bind9:
+    image: ubuntu/bind9:latest
+    container_name: bind9
+    environment:
+      - BIND9_USER=root
+      - TZ=Etc/UTC
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    volumes:
+      - ./config:/etc/bind/named.conf
+      - ./cache:/var/cache/bind
+      - ./records:/var/lib/bind
+    restart: unless-stopped

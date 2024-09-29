@@ -1,0 +1,16 @@
+---
+services:
+  dashy:
+    image: lissy93/dashy
+    container_name: dashy
+    environment:
+      - NODE_ENV=production
+    ports:
+      - 4045:80
+    # healthcheck:
+    #   test: ['CMD', 'node', '/app/services/healthcheck']
+    #   interval: 1m30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 40s
+    restart: unless-stopped

@@ -1,0 +1,27 @@
+---
+services:
+  netdata:
+    image: netdata/netdata
+    container_name: netdata
+    hostname: netdata.local.example.com # set to fqdn of host
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - netdataconfig:/etc/netdata
+      - netdatalib:/var/lib/netdata
+      - netdatacache:/var/cache/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+    ports:
+      - 19999:19999
+    restart: unless-stopped
+
+volumes:
+  netdataconfig:
+  netdatalib:
+  netdatacache:

@@ -1,0 +1,28 @@
+---
+services:
+  authelia:
+    image: authelia/authelia
+    container_name: authelia
+    networks:
+      - proxy
+    environment:
+      - TZ=Etc/UTC 
+    volumes:
+      - ./config:/config
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.authelia.rule=Host(`auth.example.com`)'
+      - 'traefik.http.routers.authelia.entrypoints=https'
+      - 'traefik.http.routers.authelia.tls=true'
+      - 'traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=https://auth.local.example.com'
+      - 'traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true'
+      - 'traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email'
+    expose:
+      - 9091
+    healthcheck:
+      disable: true
+    restart: unless-stopped
+
+networks:
+  proxy:
+    external: true

@@ -1,0 +1,40 @@
+---
+services:
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./config:/config
+      - series:/series 
+      - downloads:/downloads 
+      - completed:/completed
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+    networks:
+      - backend
+
+volumes:
+  series:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/series"
+  downloads:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/downloads"
+  completed:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/completed"
+
+networks:
+  backend:
+    external: true

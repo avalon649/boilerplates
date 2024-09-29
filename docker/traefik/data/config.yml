@@ -1,0 +1,200 @@
+http:
+ #region routers 
+  routers:
+    airsonic:
+      entryPoints:
+        - "https"
+      rule: "Host(`airsonic.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: airsonic
+    grafana:
+      entryPoints:
+        - "https"
+      rule: "Host(`grafana.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: grafana 
+    kasm:
+      entryPoints:
+        - "https"
+      rule: "Host(`kasm.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: kasm  
+    influxdb:
+      entryPoints:
+        - "https"
+      rule: "Host(`influxdb.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: influxdb 
+    nextcloud:
+      entryPoints:
+        - "https"
+      rule: "Host(`nextcloud.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: nextcloud
+    pihole-01:
+      entryPoints:
+        - "https"
+      rule: "Host(`pihole-01.local.example.com`)"
+      middlewares:
+        - default-headers
+        - addprefix-pihole-01
+      tls: {}
+      service: pihole-01
+    pihole-02:
+      entryPoints:
+        - "https"
+      rule: "Host(`pihole-02.local.example.com`)"
+      middlewares:
+        - default-headers
+        - addprefix-pihole-02
+      tls: {}
+      service: pihole-02 
+    plex:
+      entryPoints:
+        - "https"
+      rule: "Host(`plex.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: plex                                     
+    proxmox:
+      entryPoints:
+        - "https"
+      rule: "Host(`proxmox.local.example.com`)"
+      middlewares:
+        - authelia
+        - default-headers
+      tls: {}
+      service: proxmox
+    prometheus:
+      entryPoints:
+        - "https"
+      rule: "Host(`prometheus.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: prometheus
+    truenas:
+      entryPoints:
+        - "https"
+      rule: "Host(`truenas.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: truenas
+ 
+#endregion
+#region services
+  services:
+    airsonic:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.5.200:4040"
+        passHostHeader: true
+    grafana:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.5.200:3000"
+        passHostHeader: true
+    kasm:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.5.112"
+        passHostHeader: true
+    influxdb:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.5.200:8086"
+        passHostHeader: true
+    nextcloud:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.5.200:9443"
+        passHostHeader: true        
+    pihole-01:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.5.53:80"
+        passHostHeader: true  
+    pihole-02:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.5.54:80"
+        passHostHeader: true 
+    plex:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.5.200:32400"
+        passHostHeader: true                                                  
+    proxmox:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.5.100:8006"
+        passHostHeader: true
+    prometheus:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.5.200:9090"
+        passHostHeader: true
+    truenas:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.5.78"
+        passHostHeader: true
+
+#endregion
+  middlewares:
+    https-redirect:
+      redirectScheme:
+        scheme: https  
+    authelia:
+      forwardAuth:
+        address: "http://authelia:9091/api/verify?rd=https://auth.local.spacejarvis.com"
+    addprefix-pihole-01:
+      addPrefix:
+        prefix: "/admin"
+    addprefix-pihole-02:
+      addPrefix:
+        prefix: "/admin"   
+    nextcloud:
+      redirectRegex:
+        permanent: true
+        regex: 'https://(.*)/.well-known/(?:card|cal)dav'
+        replacement: 'https://$${1}/remote.php/dav' 
+
+    default-headers:
+      headers:
+        frameDeny: true
+        sslRedirect: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+        customRequestHeaders:
+          X-Forwarded-Proto: https
+
+    default-whitelist:
+      ipWhiteList:
+        sourceRange:
+        - "10.0.0.0/8"
+        - "192.168.0.0/16"
+        - "172.16.0.0/12"
+
+    secured:
+      chain:
+        middlewares:
+        - default-whitelist
+        - default-headers

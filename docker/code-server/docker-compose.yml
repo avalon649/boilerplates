@@ -1,0 +1,16 @@
+---
+services:
+  code-server:
+    image: lscr.io/linuxserver/code-server
+    container_name: code-server
+    user: root:root
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    ports:
+      - 4443:8443
+    volumes:
+      - ./config:/config:rw
+      - ./assets:/assets:rw
+    restart: unless-stopped

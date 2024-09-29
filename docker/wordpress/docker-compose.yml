@@ -1,0 +1,37 @@
+---
+services:
+  wordpress:
+    image: wordpress
+    container_name: wordpress-app
+    environment:
+      WORDPRESS_DB_HOST: ${DB_HOST}
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${DB_NAME}
+    env_file:
+      - .env
+    volumes:
+      - wordpress:/var/www/html
+    ports:
+      - 8080:80
+    restart: always
+
+  db:
+    image: mysql:5.7
+    container_name: wordpress-mysql
+    environment:
+      MYSQL_DATABASE: ${DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_RANDOM_ROOT_PASSWORD: ${ROOT_PASSWORD}
+    env_file:
+      - .env
+    volumes:
+      - db:/var/lib/mysql
+    # ports:
+    #   - 3306:3306  
+    restart: always
+
+volumes:
+  wordpress:
+  db:

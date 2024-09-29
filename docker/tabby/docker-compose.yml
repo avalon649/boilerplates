@@ -1,0 +1,24 @@
+---
+services:
+  tabby:
+    image: tabbyml/tabby
+    container_name: tabby
+    command: serve --model StarCoder-1B --chat-model Qwen2-1.5B-Instruct --device cuda
+    volumes:
+      - ./tabby:/data
+    ports:
+      - 8090:8080
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]    
+    networks:
+      - backend
+
+networks:
+  backend:
+    external: true      

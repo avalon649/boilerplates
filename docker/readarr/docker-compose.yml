@@ -1,0 +1,16 @@
+---
+services:
+  readarr:
+    image: linuxserver/readarr:latest
+    container_name: readarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./config:/config
+      - ./books:/books
+      - ./downloads:/downloads
+    ports:
+      - 8787:8787
+    restart: unless-stopped

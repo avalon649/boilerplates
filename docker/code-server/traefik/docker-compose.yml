@@ -1,0 +1,33 @@
+---
+services:
+  code-server:
+    image: lscr.io/linuxserver/code-server
+    container_name: code-server
+    networks:
+      - proxy
+    user: root:root
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./config:/config:rw
+      - ./assets:/assets:rw
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.codeserver.entrypoints=http"
+      - "traefik.http.routers.codeserver.rule=Host(`codeserver.local.example.com`)"
+      - "traefik.http.middlewares.codeserver-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.codeserver.middlewares=codeserver-https-redirect"
+      - "traefik.http.routers.codeserver-secure.entrypoints=https"
+      - "traefik.http.routers.codeserver-secure.rule=Host(`codeserver.local.example.com`)"
+      - "traefik.http.routers.codeserver-secure.tls=true"
+      - "traefik.http.routers.codeserver-secure.service=codeserver"
+      - "traefik.http.services.codeserver.loadbalancer.server.port=8443"
+      - "traefik.docker.network=proxy"
+      - 'traefik.http.routers.codeserver-secure.middlewares=authelia@docker'
+    restart: unless-stopped
+
+networks:
+  proxy:
+    external: true

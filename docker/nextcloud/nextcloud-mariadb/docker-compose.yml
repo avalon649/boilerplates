@@ -1,0 +1,39 @@
+---
+services:
+  mariadb:
+    image: mariadb:10.6
+    container_name: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=${ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+    volumes:
+      - ./mariadb/config:/config
+    # ports:
+    #   - 3306:3306  
+    restart: unless-stopped
+    networks:
+      - nextcloud
+
+  nextcloud:
+    image: nextcloud
+    container_name: nextcloud
+    environment:
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_HOST=db
+    volumes:
+      - ./nextcloud:/var/www/html
+    ports:
+      - 8080:80
+    links:
+      - mariadbdb
+    restart: unless-stopped
+    networks:
+      - nextcloud
+
+networks:
+  nextcloud:
+    external: true

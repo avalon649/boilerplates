@@ -1,0 +1,27 @@
+---
+services:
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseer
+    networks:
+      - backend
+    environment:
+      - LOG_LEVEL=info
+      - TZ=Europe/Malta
+      - JELLYFIN_TYPE=emby
+    volumes:
+      - config:/app/config
+    ports:
+      - 5055:5055
+    restart: unless-stopped  
+
+volumes:
+  config:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/docker-volumes/jellyseer/"
+
+networks:
+  backend:
+    external: true

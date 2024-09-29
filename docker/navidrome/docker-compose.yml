@@ -1,0 +1,35 @@
+---
+services:
+  navidrome:
+    image: deluan/navidrome:latest
+    container_name: navidrome
+    user: 1000:1000
+    environment:
+      - ND_SCANSCHEDULE=1h
+      - ND_LOGLEVEL=info
+      - ND_SESSIONTIMEOUT=24h
+      - ND_BASEURL=""
+    volumes:
+      - data:/data:rw
+      - music:/music:ro
+    ports:
+      - 4533:4533
+    restart: unless-stopped
+    networks:
+      - backend
+
+volumes:
+  data:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/docker-volumes/navidrome/data"
+  music:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/music"
+
+networks:
+  backend:
+    external: true

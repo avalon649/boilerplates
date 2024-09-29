@@ -1,0 +1,36 @@
+---
+services:
+  emby:
+    image: lscr.io/linuxserver/emby:latest
+    container_name: emby
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Malta
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - config:/config
+      - movies:/movies
+      - series:/series
+    ports:
+      - 8096:8096
+    restart: unless-stopped
+    networks:
+      - backend
+
+volumes:
+  config:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/docker-volumes/emby"
+  movies:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/movies"
+  series:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/series"

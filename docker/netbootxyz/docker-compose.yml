@@ -1,0 +1,24 @@
+---
+services:
+  netbootxyz:
+    image: lscr.io/linuxserver/netbootxyz:latest
+    container_name: netbootxyz
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./config:/config
+      - ./assets:/assets
+    ports:
+      - 3000:3000
+      - 69:69/udp
+      - 8080:80
+    restart: unless-stopped
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    external: true
+

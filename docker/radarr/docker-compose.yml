@@ -1,0 +1,40 @@
+---
+services:
+  radarr:
+    image: linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Malta
+    volumes:
+      - ./data:/config
+      - movies:/movies
+      - downloads:/downloads
+      - completed:/completed
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+    networks:
+      - backend
+
+volumes:
+  movies:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/movies"
+  downloads:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/downloads"
+  completed:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/storage0/plex/completed"
+
+networks:
+  backend:
+    external: true

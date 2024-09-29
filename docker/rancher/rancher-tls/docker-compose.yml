@@ -1,0 +1,17 @@
+---
+services:
+  rancher:
+    image: rancher/rancher:latest
+    container_name: rancher
+    privileged: true
+    environment:
+     - SSL_CERT_DIR="/container/certs"
+    volumes:
+      # - /opt/rancher:/var/lib/rancher
+      - ./certs/fullchain.pem:/etc/rancher/ssl/cert.pem
+      - ./certs/cert-key.pem:/etc/rancher/ssl/key.pem
+      - ./certs/cert.pem:/etc/rancher/ssl/cacerts.pem
+    ports:
+     - 8080:80
+     - 8443:443
+    restart: unless-stopped

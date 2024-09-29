@@ -1,0 +1,18 @@
+---
+services:
+  nginx:
+    image: lscr.io/linuxserver/nginx
+    container_name: nginx
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./config:/config
+    ports:
+      - 8085:80
+      - 5443:443
+    restart: unless-stopped
+
+volumes:
+  nginx-config:

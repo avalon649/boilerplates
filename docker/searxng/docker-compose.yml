@@ -1,0 +1,40 @@
+---
+services:
+  redis:
+    container_name: redis-xng
+    image: docker.io/library/redis:alpine
+    command: redis-server --save 30 1 --loglevel warning
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+    volumes:
+      - redis-data:/data
+    networks:
+      - backend
+
+  searxng:
+    container_name: searxng
+    image: searxng/searxng:latest
+    environment:
+      - SEARXNG_BASE_URL=https://searxng.example.com
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
+    volumes:
+      - ./searxng:/etc/searxng:rw
+    ports:
+      - "8088:8080"
+
+volumes:
+  redis-data:
