@@ -10,15 +10,15 @@ services:
       - MYSQL_ROOT_PASSWORD=p@55w0rd
     volumes:
       - mysql:/var/lib/mysql
-    ports:
-      - 3306:3306
+    # ports:
+    #   - 3306:3306
     restart: unless-stopped
-    networks:
-      - mysql
+    # networks:
+    #   - mysql
 
 volumes:
   mysql:
-networks:
-  mysql:
-    external: true
+# networks:
+#   mysql:
+#     external: true
 
