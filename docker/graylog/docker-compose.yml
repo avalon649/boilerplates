@@ -2,18 +2,16 @@
 services:
   mongo:
     image: mongo:6.0.5-jammy
-    container_name: mongodb
-    networks:
-      - graynet
+    container_name: mongod
     volumes:
       - "mongo_data:/data/db"
     restart: unless-stopped
+    networks:
+      - graynet
 
   opensearch:
     image: opensearchproject/opensearch:2
     container_name: opensearch
-    networks:
-      - graynet
     environment:
       - "OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g"
       - "bootstrap.memory_lock=true"
@@ -33,12 +31,12 @@ services:
         soft: 65536
         hard: 65536
     restart: unless-stopped
-
+    networks:
+      - graynet
+      
   graylog:
     image: graylog/graylog:5.1
     container_name: graylog
-    networks:
-      - graynet
     environment:
       - GRAYLOG_PASSWORD_SECRET="somepasswordpepper"
       - GRAYLOG_ROOT_PASSWORD_SHA2="8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
@@ -76,7 +74,9 @@ services:
       - 12201:12201/tcp # GELF
       - 12201:12201/udp # GELF
     restart: unless-stopped
-
+    networks:
+      - graynet
+      
 volumes:
   mongo_data:
     driver: local

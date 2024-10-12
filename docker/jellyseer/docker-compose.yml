@@ -3,18 +3,18 @@ services:
   jellyseerr:
     image: fallenbagel/jellyseerr:latest
     container_name: jellyseer
-    networks:
-      - backend
+    ports:
+      - 5055:5055    
     environment:
       - LOG_LEVEL=info
       - TZ=Europe/Malta
       - JELLYFIN_TYPE=emby
     volumes:
       - config:/app/config
-    ports:
-      - 5055:5055
     restart: unless-stopped  
-
+    networks:
+      - backend
+      
 volumes:
   config:
     driver_opts:

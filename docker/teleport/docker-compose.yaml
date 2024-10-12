@@ -1,21 +1,17 @@
 ---
-# -- (Optional) When using Traefik, use this section
-# networks:
-#   your-traefik-network:
-#     external: true
 services:
   teleport:
     image: public.ecr.aws/gravitational/teleport-distroless:13
     container_name: teleport
-    volumes:
-      - ./config:/etc/teleport
-      - ./data:/var/lib/teleport
     ports:
       # -- (Optional) Remove this section, when using Traefik
       - "3080:3080"
       - "3023:3023"
       - "3024:3024"
       - "3025:3025"
+    volumes:
+      - ./config:/etc/teleport
+      - ./data:/var/lib/teleport      
     # -- (Optional) Traefik example configuration
     # labels:
       # - "traefik.enable=true"
@@ -29,6 +25,4 @@ services:
       # - "traefik.http.routers.teleport-https.tls.certresolver=your-certresolver"
       # - "traefik.http.routers.teleport-https.tls.domains[0].main=your-server-url"
       # - "traefik.http.routers.teleport-https.tls.domains[0].sans=*.your-server-url"
-    # networks:
-    #   - your-traefik-network
     restart: unless-stopped

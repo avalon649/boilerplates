@@ -1,8 +1,8 @@
 ---
 services:
   dashy:
-    container_name: Dashy
     image: lissy93/dashy
+    container_name: Dashy
     environment:
       - NODE_ENV=production
       - UID=1000

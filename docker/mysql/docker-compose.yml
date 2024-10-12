@@ -9,16 +9,10 @@ services:
       - MYSQL_PASSWORD=p@55w0rd
       - MYSQL_ROOT_PASSWORD=p@55w0rd
     volumes:
-      - mysql:/var/lib/mysql
-    # ports:
-    #   - 3306:3306
+      - ./mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
     restart: unless-stopped
-    # networks:
-    #   - mysql
 
-volumes:
-  mysql:
-# networks:
-#   mysql:
-#     external: true
+
 
