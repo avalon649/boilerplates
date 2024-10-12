@@ -5,13 +5,16 @@ services:
     container_name: mysql
     hostname: mysql
     volumes:
-      - semaphore-mysql:/var/lib/mysql
+      - ./semaphore-mysql:/var/lib/mysql
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     restart: unless-stopped
+    networks:
+      - semaphore-net
+
   semaphore:
     image: semaphoreui/semaphore:v2.8.90
     container_name: ansiblesemaphore
@@ -36,12 +39,12 @@ services:
       - ./inventory/:/inventory:ro
       - ./authorized-keys/:/authorized-keys:ro
       - ./config/:/etc/semaphore:rw
-    env_file:
-      - .env
     restart: unless-stopped
     depends_on:
       - mysql
+    networks:
+      - semaphore-net
 
-volumes:
-  semaphore-mysql:
-    driver: local
+networks:
+  semaphore-network:
+    external: true

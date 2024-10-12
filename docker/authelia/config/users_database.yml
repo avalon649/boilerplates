@@ -7,10 +7,10 @@
 
 # List of users
 users:
-  avalon649:
+  username:
     displayname: "username"
     # Password is Authelia
-    password: "$argon2id$v=123456789"
+    password: "$argon2id$v=p@55w0rd"
     email: admin@example.com
     groups:
       - admins

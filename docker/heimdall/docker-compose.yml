@@ -11,5 +11,15 @@ services:
      - 80:80
      - 443:443
     volumes:
-      - ./config:/config
+      - config:/config
     restart: unless-stopped
+    networks:
+      - heimdall
+
+volumes:
+  config:
+    driver: local    
+
+networks:
+  heimdall:
+    external: true    
