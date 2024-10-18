@@ -1,0 +1,32 @@
+---
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    # network_mode: host
+    environment:
+      # - NVIDIA_VISIBLE_DEVICES=all
+      - WEBUI_NAME=Open-AI   
+      - WEBUI_AUTH=False
+      - ENV-dev   
+      - OLLAMA_BASE_URL=http://127.0.0.1:11434
+      # - ENABLE_IMAGE_GENERATION=True
+      # - AUTOMATIC_BASE_URL=http://host.docker.internal:7860
+    # extra_hosts:
+    #   - host.docker.internal:host-gateway
+    volumes:
+      - ./data:/app/backend/data
+    ports:
+      - 3030:8080
+    restart: unless-stopped
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - capabilities: ["gpu"]
+    networks:
+      - backend
+
+networks:
+  backend:
+    external: true

@@ -22,13 +22,13 @@ volumes:
   data:
     driver_opts:
       type: "nfs"
-      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
-      device: ":/mnt/storage0/docker-volumes/navidrome/data"
+      o: "addr=127.0.0.1,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/nfs/docker/navidrome/data"
   music:
     driver_opts:
       type: "nfs"
-      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
-      device: ":/mnt/storage0/plex/music"
+      o: "addr=127.0.0.1,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/nfs/plex/music"
 
 networks:
   backend:

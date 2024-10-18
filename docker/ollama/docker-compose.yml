@@ -1,0 +1,36 @@
+---
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - ./ollama:/root/.ollama
+    ports:
+      - 11434:11434
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: ["gpu"]
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:cuda
+    container_name: open-webui
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - OLLAMA_BASE_URL=http://127.0.0.1:11434
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    volumes:
+      - ./open-webui:/app/backend/data
+    ports:
+      - 3000:8080
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: ["gpu"]

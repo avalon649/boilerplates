@@ -22,15 +22,15 @@ volumes:
   config:
     driver_opts:
       type: "nfs"
-      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
-      device: ":/mnt/storage0/docker-volumes/plex/config"
+      o: "addr=127.0.0.1,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/nfs/docker/plex/config"
   movies:
     driver_opts:
       type: "nfs"
-      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
-      device: ":/mnt/storage0/plex/movies"
+      o: "addr=127.0.0.1,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/nfs/plex/movies"
   series:
     driver_opts:
       type: "nfs"
-      o: "addr=10.0.21.20,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
-      device: ":/mnt/storage0/plex/series"
+      o: "addr=127.0.0.1,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/nfs/plex/series"

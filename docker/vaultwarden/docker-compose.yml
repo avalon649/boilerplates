@@ -3,23 +3,12 @@ services:
   vaultwarden:
     image: vaultwarden/server:latest
     container_name: vaultwarden
-    volumes:
-      - ./data:/data
     environment:
       - ADMIN_TOKEN=${ADMIN_TOKEN}
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.vaultwarden.entrypoints=http"
-      - "traefik.http.routers.vaultwarden.rule=Host(`vaultwarden.local.example.com`)"
-      - "traefik.http.middlewares.vaultwarden-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.vaultwarden.middlewares=vaultwarden-https-redirect"
-      - "traefik.http.routers.vaultwarden-secure.entrypoints=https"
-      - "traefik.http.routers.vaultwarden-secure.rule=Host(`vaultwarden.local.example.com`)"
-      - "traefik.http.routers.vaultwarden-secure.tls=true"
-      - "traefik.http.routers.vaultwarden-secure.service=vaultwarden"
-      - "traefik.http.services.vaultwarden.loadbalancer.server.port=80"
-      - "traefik.docker.network=proxy"
-      - 'traefik.http.routers.vaultwarden-secure.middlewares=authelia@docker'
+    ports:
+       - 80:80
+    volumes:
+      - ./data:/data
     restart: unless-stopped
     networks:
       - proxy

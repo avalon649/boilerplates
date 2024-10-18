@@ -1,0 +1,87 @@
+http:
+ #region routers 
+  routers: 
+    example-app:
+      entryPoints:
+        - "https"
+      rule: "Host(`app.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: example-app                          
+#endregion
+
+#region services
+  services:   
+    example-app:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:88080"
+        passHostHeader: true
+#endregion
+  middlewares:   
+    https-redirect:
+      redirectScheme:
+        scheme: https      
+    addprefix-pihole-nor:
+      addPrefix:
+        prefix: "/admin"
+    addprefix-pihole-sth:
+      addPrefix:
+        prefix: "/admin"  
+
+    default-headers:
+      headers:
+        frameDeny: true
+        sslRedirect: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+        customRequestHeaders:
+          X-Forwarded-Proto: https
+
+    default-whitelist:
+      ipWhiteList:
+        sourceRange:
+        - "10.0.0.0/8"
+        - "192.168.0.0/16"
+        - "172.16.0.0/12"
+
+    secured:
+      chain:
+        middlewares:
+        - default-whitelist
+        - default-headers
+
+########TCP#########
+tcp:
+  routers: 
+    wazuh-agent:
+      entryPoints:
+        - "1514/tcp"
+        - "1515/tcp"
+        - "1516/tcp"
+      rule: "HostSNI(`*`)"
+      # tls: {}
+      service: wazuh-agent  
+    gitlab-ssh:
+      entryPoints:
+        - "gitlab-ssh"
+      rule: "HostSNI(`*`)"
+      # tls: {}
+      service: gitlab-ssh       
+  services:   
+    gitlab-ssh:
+      loadBalancer:
+        servers:
+          - address: 10.0.21.105:2222          
+    wazuh-agent:
+      loadBalancer:
+        servers:
+          - address: 10.0.21.35:1515 
+          - address: 10.0.21.35:1514     
+          - address: 10.0.21.35:1516           

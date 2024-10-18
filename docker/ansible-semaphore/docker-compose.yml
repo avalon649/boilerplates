@@ -1,24 +1,26 @@
 ---
+volumes:
+  semaphore-mysql:
+    driver: local
+
 services:
   mysql:
     image: mysql:8.0
-    container_name: mysql
     hostname: mysql
     volumes:
-      - ./semaphore-mysql:/var/lib/mysql
+      - semaphore-mysql:/var/lib/mysql
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     restart: unless-stopped
-    networks:
-      - semaphore-net
-
   semaphore:
-    image: semaphoreui/semaphore:v2.8.90
     container_name: ansiblesemaphore
+    image: semaphoreui/semaphore:v2.8.90
     user: "${UID}:${GID}"
+    ports:
+      - 3000:3000
     environment:
       - SEMAPHORE_DB_USER=${MYSQL_DATABASE}
       - SEMAPHORE_DB_PASS=${MYSQL_PASSWORD}
@@ -33,8 +35,8 @@ services:
       - SEMAPHORE_ADMIN=${ADMIN}
       - SEMAPHORE_ACCESS_KEY_ENCRYPTION=${KEY_ENCRYPTION}
       - ANSIBLE_HOST_KEY_CHECKING=false
-    ports:
-      - 3000:3000
+    env_file:
+      - .env
     volumes:
       - ./inventory/:/inventory:ro
       - ./authorized-keys/:/authorized-keys:ro
@@ -42,9 +44,3 @@ services:
     restart: unless-stopped
     depends_on:
       - mysql
-    networks:
-      - semaphore-net
-
-networks:
-  semaphore-network:
-    external: true

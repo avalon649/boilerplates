@@ -20,11 +20,20 @@ services:
 
 volumes:
   config:
-    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=127.0.0.1,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/nfs/docker/emby/"
   movies:
-    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=127.0.0.1,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/nfs/plex/movies"
   series:
-    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=127.0.0.1,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4"
+      device: ":/mnt/nfs/plex/series"
     
 networks:
   backend:

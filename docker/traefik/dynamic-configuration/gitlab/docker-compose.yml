@@ -1,0 +1,47 @@
+---
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    container_name: gitlab
+    # ports:
+    #   - '80:80'
+    #   - '443:443'  
+    #   - "22:22"
+    volumes:
+      - ./config:/etc/gitlab
+      - ./logs:/var/log/gitlab
+      - ./data:/var/opt/data
+    labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.gitlab.rule=Host(`git.local.kore-zone.com`)"
+        - "traefik.http.routers.gitlab.entrypoints=https"
+        - "traefik.http.routers.gitlab.tls=true"
+        - "traefik.http.services.gitlab.loadbalancer.server.port=80"
+        - "traefik.tcp.routers.gitlab-ssh.rule=HostSNI(`*`)"
+        - "traefik.tcp.routers.gitlab-ssh.entrypoints=gitlab-ssh"
+        - "traefik.tcp.routers.gitlab-ssh.service=gitlab-ssh"
+        - "traefik.tcp.services.gitlab-ssh.loadbalancer.server.port=22"      
+    networks:
+      - proxy
+    restart: unless-stopped
+  
+  registry:
+    image: registry:latest
+    container_name: registry
+    # ports:
+    #   - 5000:5000
+    volumes:
+      - ./registry:/var/lib/registry
+    labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.registry.rule=Host(`registry.local.kore-zone.com`)"
+        - "traefik.http.routers.registry.entrypoints=https"
+        - "traefik.http.routers.registry.tls=true"
+        - "traefik.http.services.registry.loadbalancer.server.port=5000"  
+    networks:
+      - proxy
+    restart: unless-stopped
+
+networks:
+  proxy:
+    external: true  
