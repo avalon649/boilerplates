@@ -78,10 +78,10 @@ tcp:
     gitlab-ssh:
       loadBalancer:
         servers:
-          - address: 10.0.21.105:2222          
+          - address: 127.0.0.1:2222          
     wazuh-agent:
       loadBalancer:
         servers:
-          - address: 10.0.21.35:1515 
-          - address: 10.0.21.35:1514     
-          - address: 10.0.21.35:1516           
+          - address: 127.0.0.1:1515 
+          - address: 127.0.0.1:1514     
+          - address: 127.0.0.1:1516           
