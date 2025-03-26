@@ -2,26 +2,27 @@
 services:
   kali:
     image: linuxserver/kali-linux:latest
+    container_name: kali-linux
+    security_opt:
+      - seccomp:unconfined
     deploy:
       resources:
         reservations:
           devices:
             - driver: nvidia
               count: all
-              capabilities: [compute,video,graphics,utility]
-    container_name: kali-linux
+              capabilities: [gpu]
     environment:
-      - NVIDIA_VISIBLE_DEVICES=all
       - PUID=1000
       - PGID=1000
       - TZ=Etc/Malta
       - SUBFOLDER=/ 
       - "TITLE=Kali Linux" 
     volumes:
-      - /path/to/data:/config
+      - ./config:/config
       - /var/run/docker.sock:/var/run/docker.sock 
     ports:
       - 3000:3000
-      - 3001:3001
+      - 3001:3001  
     shm_size: "1gb" 
     restart: unless-stopped
