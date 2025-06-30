@@ -21,12 +21,6 @@ services:
     restart: always
     healthcheck:
       disable: false
-    # labels:
-      # - "traefik.enable=true"
-      # - "traefik.http.routers.${TRAEFIK_ROUTER_NAME}.rule=Host(`${TRAEFIK_DOMAIN}`)"
-      # - "traefik.http.routers.${TRAEFIK_ROUTER_NAME}.entrypoints=websecure"
-      # - "traefik.http.routers.${TRAEFIK_ROUTER_NAME}.tls.certresolver=${TRAEFIK_CERT_RESOLVER}"
-      # - "traefik.http.services.${TRAEFIK_ROUTER_NAME}.loadbalancer.server.port=2283"
 
   immich-machine-learning:
     container_name: immich_machine_learning
