@@ -1,0 +1,15 @@
+services:
+  erugo:
+    image: wardy784/erugo:latest
+    container_name: erugo
+    volumes:
+      - ./storage:/var/www/html/storage
+    ports:
+      - "9998:80"
+    restart: unless-stopped      
+    networks:
+      - backend
+
+networks:
+  backend:
+    external: true

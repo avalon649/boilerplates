@@ -1,57 +1,68 @@
----
+name: immich
+
 services:
   immich-server:
-    image: ghcr.io/immich-app/immich-server:latest
     container_name: immich_server
-    command: [ "start.sh", "immich" ]
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+    extends:
+      file: hwaccel.transcoding.yml
+      service: ${TRANSCODING_BACKEND:-cpu}
     volumes:
       - ${UPLOAD_LOCATION}:/usr/src/app/upload
+    #   - /mnt/photos:/mnt/photos:ro # update and uncomment if you are using a network share
       - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
     ports:
-      - 2283:3001
+      - '2283:2283'
     depends_on:
       - redis
       - database
-    restart: unless-stopped
-
-  immich-microservices:
-    image: ghcr.io/immich-app/immich-server:latest
-    container_name: immich_microservices
-    # extends:
-    #   file: hwaccel.yml
-    #   service: hwaccel
-    command: [ "start.sh", "microservices" ]
-    volumes:
-      - ${UPLOAD_LOCATION}:/usr/src/app/upload
-      - /etc/localtime:/etc/localtime:ro
-    depends_on:
-      - redis
-      - database
-    restart: unless-stopped
+    restart: always
+    healthcheck:
+      disable: false
+    # labels:
+      # - "traefik.enable=true"
+      # - "traefik.http.routers.${TRAEFIK_ROUTER_NAME}.rule=Host(`${TRAEFIK_DOMAIN}`)"
+      # - "traefik.http.routers.${TRAEFIK_ROUTER_NAME}.entrypoints=websecure"
+      # - "traefik.http.routers.${TRAEFIK_ROUTER_NAME}.tls.certresolver=${TRAEFIK_CERT_RESOLVER}"
+      # - "traefik.http.services.${TRAEFIK_ROUTER_NAME}.loadbalancer.server.port=2283"
 
   immich-machine-learning:
-    image: ghcr.io/immich-app/immich-machine-learning:latest
     container_name: immich_machine_learning
+    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}-cuda
+    extends:
+      file: hwaccel.ml.yml
+      service: cuda
     volumes:
-      - model-cache:/cache
-    restart: unless-stopped
+      - model-cache:/cache 
+    env_file:
+      - .env
+    restart: always
+    healthcheck:
+      disable: false
 
   redis:
     container_name: immich_redis
-    image: redis:6.2-alpine@sha256:b6124ab2e45cc332e16398022a411d7e37181f21ff7874835e0180f56a09e82a
-    restart: unless-stopped
+    image: docker.io/valkey/valkey:8-bookworm
+    healthcheck:
+      test: redis-cli ping || exit 1
+    restart: always
 
   database:
     container_name: immich_postgres
-    image: tensorchord/pgvecto-rs:pg14-v0.1.11@sha256:0335a1a22f8c5dd1b697f14f079934f5152eaaa216c09b61e293be285491f8ee
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_DB: ${DB_DATABASE_NAME}
+      POSTGRES_INITDB_ARGS: '--data-checksums'
+      DB_STORAGE_TYPE: ${DB_STORAGE_TYPE:-SSD}
     volumes:
-      - pgdata:/var/lib/postgresql/data
-    restart: unless-stopped
+      - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
+    env_file:
+      - .env
+    restart: always
 
 volumes:
-  pgdata:
   model-cache:
