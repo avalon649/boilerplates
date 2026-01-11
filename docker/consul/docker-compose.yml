@@ -1,0 +1,39 @@
+---
+services:
+  consul:
+    image: hashicorp/consul:latest
+    container_name: consul-server
+    restart: unless-stopped
+    hostname: consul-nor
+    networks:
+      - proxy
+    ports:
+      - "8500:8500"   # HTTP API
+      - "8300:8300"   # Server RPC
+      - "8600:8600/udp" # DNS
+      - "8301:8301"   # Serf LAN (TCP)
+      - "8301:8301/udp" # Serf LAN (UDP)
+      - "8302:8302"   # Serf WAN (TCP)
+      - "8302:8302/udp" # Serf WAN (UDP)
+    volumes:
+      - ./consul-data:/consul/data
+      - ./consul-config:/consul/config
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    command: >
+      agent
+      -server
+      -bootstrap-expect=2
+      -node=consul-nor
+      -advertise=10.0.21.10
+      -client=0.0.0.0
+      -ui
+      -retry-join=10.0.21.11
+      -data-dir=/consul/data
+      -config-dir=/consul/config
+    labels:
+      - "traefik.enable=false"
+
+networks:
+  proxy:
+    external: true
