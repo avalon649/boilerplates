@@ -1,0 +1,47 @@
+api:
+  dashboard: true
+  debug: true
+
+entryPoints:
+  http:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: https
+          scheme: https
+  https:
+    address: ":443"
+
+serversTransport:
+  insecureSkipVerify: true
+
+providers:
+  # Docker provider for container labels
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+
+  # File provider - keep as backup during migration
+  file:
+    filename: /config.yml
+
+  # ⭐ NEW: Consul provider for centralized HA configuration
+  consul:
+    endpoints:
+      - "http://consul-server:8500"
+    rootKey: "traefik"
+
+certificatesResolvers:
+  cloudflare:
+    acme:
+      email: admin@example.com
+      storage: acme.json
+      dnsChallenge:
+        provider: cloudflare
+        resolvers:
+          - "1.1.1.1:53"
+          - "1.0.0.1:53"
+
+log:
+  level: INFO
