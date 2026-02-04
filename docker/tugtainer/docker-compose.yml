@@ -1,0 +1,18 @@
+services:
+  app:
+    container_name: tugtainer
+    image: quenary/tugtainer:latest
+    volumes:
+      - tugtainer_data:/tugtainer
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    networks:
+      - backend
+    ports:
+      - '9412:80'
+volumes:
+  tugtainer_data:
+
+networks:
+  backend:
+    driver: bridge

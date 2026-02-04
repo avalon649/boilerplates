@@ -1,0 +1,28 @@
+services:
+  speedtest-tracker:
+    image: lscr.io/linuxserver/speedtest-tracker:latest
+    container_name: speedtest-tracker
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+      - "8443:443"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - DB_CONNECTION=sqlite
+      - APP_KEY=base64:generated_app_key_here
+      - SPEEDTEST_SCHEDULE=0 */1 * * *
+      - DISPLAY_TIMEZONE=America/New_York
+      - PRUNE_RESULTS_OLDER_THAN=0
+    volumes:
+      - speedtest-config:/config
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/api/healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  speedtest-config:
