@@ -1,20 +1,20 @@
 ---
 services:
   watchtower:
-    image: containrrr/watchtower
+    image: containrrr/watchtower:latest
     container_name: watchtower
+    restart: unless-stopped
+    networks:
+      - harbor
     environment:
-      - TZ=Etc/UTC
+      - TZ=Europe/Malta
       - WATCHTOWER_DEBUG=true
       - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_SCHEDULE="0 30 3 * * *"
+      - WATCHTOWER_SCHEDULE=0 30 3 * * *
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/timezone:/etc/timezone:ro
-    restart: unless-stopped
-    networks:
-      - frontend
 
 networks:
-  frontend:
+  harbor:
     external: true
