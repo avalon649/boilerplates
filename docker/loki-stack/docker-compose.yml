@@ -1,58 +1,54 @@
----
 networks:
   loki:
     driver: bridge
 
 volumes:
-  loki_data: {}
-  grafana_data: {}
+  loki_data:
+  grafana_data:
 
 services:
+
   loki:
-    image: grafana/loki:2.9.4
+    image: grafana/loki:latest
     container_name: loki
     restart: unless-stopped
     ports:
       - "3100:3100"
     volumes:
-      - ./loki/loki-config.yaml:/etc/loki/loki-config.yaml:ro
+      - ./loki/config.yml:/etc/loki/config.yml:ro
       - loki_data:/loki
-    command: -config.file=/etc/loki/loki-config.yaml
+    command: -config.file=/etc/loki/config.yml
     networks:
       - loki
     healthcheck:
-      test: ["CMD-SHELL", "wget -q --tries=1 -O- http://localhost:3100/ready | grep -q ready"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      disable: true
 
   promtail:
-    image: grafana/promtail:2.9.4
+    image: grafana/promtail:latest
     container_name: promtail
     restart: unless-stopped
     volumes:
-      - ./promtail/promtail-config.yaml:/etc/promtail/promtail-config.yaml:ro
+      - ./promtail/config.yml:/etc/promtail/config.yml:ro
       - /var/log:/var/log:ro
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /run/docker.sock:/run/docker.sock:ro
-    command: -config.file=/etc/promtail/promtail-config.yaml
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /tmp/promtail:/tmp/promtail
+    command: -config.file=/etc/promtail/config.yml
     networks:
       - loki
     depends_on:
       loki:
-        condition: service_healthy
+        condition: service_started
 
   grafana:
-    image: grafana/grafana:10.3.3
+    image: grafana/grafana:latest
     container_name: grafana
     restart: unless-stopped
     ports:
-      - "3050:3000"
+      - "3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_USERS_ALLOW_SIGN_UP=false
-      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-changeme}
+      GF_USERS_ALLOW_SIGN_UP: "false"
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
@@ -60,4 +56,4 @@ services:
       - loki
     depends_on:
       loki:
-        condition: service_healthy
+        condition: service_started
